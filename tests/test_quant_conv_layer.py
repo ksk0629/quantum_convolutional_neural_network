@@ -81,5 +81,5 @@ class TestQuantConvLayer:
 
         assert isinstance(conv_layer_circuit, qiskit.QuantumCircuit)
         params = conv_layer_circuit.parameters
-        num_params = num_qubits * 3 if num_qubits > 2 else 1
+        num_params = num_qubits * 3 if num_qubits > 2 else 3
         assert len(params) == num_params
