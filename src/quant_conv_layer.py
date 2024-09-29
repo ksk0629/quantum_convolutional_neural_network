@@ -26,10 +26,10 @@ class QuantConvLayer(BaseQuantLayer):
             raise TypeError(msg)
         self.param_prefix = param_prefix
 
-    def __get_one_circuit(self):
+    def __get_one_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional circuit."""
         pass
 
-    def get_layer(self):
+    def get_layer(self) -> qiskit.QuantumCircuit:
         """Return the convolutional layer as a qiskit.QuantumCircuit."""
         pass
