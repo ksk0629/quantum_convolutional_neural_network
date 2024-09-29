@@ -29,10 +29,10 @@ class QuantConvLayer(BaseQuantLayer):
             raise TypeError(msg)
         self.param_prefix = param_prefix
 
-    def __get_one_circuit(self) -> qiskit.QuantumCircuit:
+    def __get_one_circuit(
+        self, params: qiskit.circuit.ParameterVector
+    ) -> qiskit.QuantumCircuit:
         """Return the convolutional circuit."""
-        # Create parameters.
-        params = qiskit.circuit.ParameterVector(self.param_prefix, length=3)
         # Create the convolutional circuit.
         target = qiskit.QuantumCircuit(2)
         target.rz(-np.pi / 2, 1)
@@ -48,4 +48,34 @@ class QuantConvLayer(BaseQuantLayer):
 
     def get_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional layer as a qiskit.QuantumCircuit."""
-        return qiskit.QuantumCircuit(self.num_qubits)
+        # Prepare variables to use later.
+        qc = qiskit.QuantumCircuit(self.num_qubits, name="Convolutional Layer")
+        qubits = list(range(self.num_qubits))
+        num_params = self.num_qubits * 3 if self.num_qubits > 2 else 3
+        params = qiskit.circuit.ParameterVector(self.param_prefix, length=num_params)
+
+        # Add the convolutional unitary gates to each pair of two qubits.
+        param_index = 0
+        for q1, q2 in zip(qubits[0::2], qubits[1::2]):
+            qc = qc.compose(
+                self.__get_one_circuit(params[param_index : (param_index + 3)]),
+                [q1, q2],
+            )
+            qc.barrier()
+            param_index += 3
+        if self.num_qubits != 2:
+            for q1, q2 in zip(
+                qubits[1::2], qubits[2::2] + [0]
+            ):  # [0]: To connect the last and first qubits.
+                qc = qc.compose(
+                    self.__get_one_circuit(params[param_index : (param_index + 3)]),
+                    [q1, q2],
+                )
+                qc.barrier()
+                param_index += 3
+
+        qc_inst = qc.to_instruction()
+        qc = qiskit.QuantumCircuit(self.num_qubits)
+        qc.append(qc_inst, qubits)
+
+        return qc
