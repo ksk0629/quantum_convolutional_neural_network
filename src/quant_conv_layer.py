@@ -31,7 +31,20 @@ class QuantConvLayer(BaseQuantLayer):
 
     def __get_one_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional circuit."""
-        return qiskit.QuantumCircuit(self.num_qubits)
+        # Create parameters.
+        params = qiskit.circuit.ParameterVector(self.param_prefix, length=3)
+        # Create the convolutional circuit.
+        target = qiskit.QuantumCircuit(2)
+        target.rz(-np.pi / 2, 1)
+        target.cx(1, 0)
+        target.rz(params[0], 0)
+        target.ry(params[1], 1)
+        target.cx(0, 1)
+        target.ry(params[2], 1)
+        target.cx(1, 0)
+        target.rz(np.pi / 2, 0)
+
+        return target
 
     def get_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional layer as a qiskit.QuantumCircuit."""
