@@ -33,6 +33,6 @@ class QuantConvLayer(BaseQuantLayer):
         """Return the convolutional circuit."""
         return qiskit.QuantumCircuit(self.num_qubits)
 
-    def get_layer(self) -> qiskit.QuantumCircuit:
+    def get_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional layer as a qiskit.QuantumCircuit."""
         return qiskit.QuantumCircuit(self.num_qubits)

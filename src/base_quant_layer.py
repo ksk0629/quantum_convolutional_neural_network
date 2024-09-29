@@ -5,5 +5,5 @@ class BaseQuantLayer(ABC):
     """Base quantum layer class"""
 
     @abstractmethod
-    def get_layer(self):
+    def get_circuit(self):
         pass
