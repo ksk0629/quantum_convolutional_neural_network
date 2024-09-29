@@ -1,3 +1,4 @@
+import numpy as np
 import qiskit
 
 from .base_quant_layer import BaseQuantLayer
@@ -12,13 +13,13 @@ class QuantConvLayer(BaseQuantLayer):
         :param int num_qubits: number of qubits
         :param str param_prefix: prefix strings of parameters
         :raises TypeError: if given num_qubits is not int type
-        :raises ValueError: if given num_qubits is not non-zero and positive
+        :raises ValueError: if given num_qubits is smaller than 2
         :raises TypeError: if given param_preifx is not str
         """
         if not isinstance(num_qubits, int):
             msg = f"num_qubits is must be int, but {type(num_qubits)}."
             raise TypeError(msg)
-        if num_qubits < 1:
+        if num_qubits < 2:
             msg = f"num_qubits is must be greater than one, but {num_qubits}."
             raise ValueError(msg)
         self.num_qubits = num_qubits

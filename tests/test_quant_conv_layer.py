@@ -17,7 +17,7 @@ class TestQuantConvLayer:
         assert cls.quant_conv_layer.num_qubits == cls.num_qubits
         assert cls.quant_conv_layer.param_prefix == cls.param_prefix
 
-    @pytest.mark.parametrize("num_qubits", [1, 2, 10])
+    @pytest.mark.parametrize("num_qubits", [2, 6, 10])
     @pytest.mark.parametrize("param_prefix", ["", "param_prefix", "t e s t"])
     def test_init(self, num_qubits, param_prefix):
         """Normal test;
@@ -43,8 +43,8 @@ class TestQuantConvLayer:
         with pytest.raises(TypeError):
             QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
 
-    @pytest.mark.parametrize("num_qubits", [0, -1])
-    def test_init_with_negative_num_qubits(self, num_qubits):
+    @pytest.mark.parametrize("num_qubits", [0, -1, 1])
+    def test_init_with_smaller_than_2_num_qubits(self, num_qubits):
         """Abnormal test;
         Initialises the QuantConvLayer with non positive num_qubits.
 
@@ -72,7 +72,7 @@ class TestQuantConvLayer:
         - the return value is qiskit.QuantumCircuit.
         - the returned circuit has the parameters attribute.
         - the length of the returned circuit's parameters attribute is 3 * num_qubits
-            if num_qubits is greater than 1. Otherwise 1.
+            if num_qubits is greater than 2. Otherwise 1 * 3.
         """
         quant_conv_layer = QuantConvLayer(
             num_qubits=num_qubits, param_prefix=self.param_prefix
@@ -81,5 +81,5 @@ class TestQuantConvLayer:
 
         assert isinstance(conv_layer_circuit, qiskit.QuantumCircuit)
         params = conv_layer_circuit.parameters
-        num_params = num_qubits * 3 if num_qubits > 1 else 1
+        num_params = num_qubits * 3 if num_qubits > 2 else 1
         assert len(params) == num_params
