@@ -1,3 +1,5 @@
+import qiskit
+
 from .base_quant_layer import BaseQuantLayer
 
 
@@ -28,8 +30,8 @@ class QuantConvLayer(BaseQuantLayer):
 
     def __get_one_circuit(self) -> qiskit.QuantumCircuit:
         """Return the convolutional circuit."""
-        pass
+        return qiskit.QuantumCircuit(self.num_qubits)
 
     def get_layer(self) -> qiskit.QuantumCircuit:
         """Return the convolutional layer as a qiskit.QuantumCircuit."""
-        pass
+        return qiskit.QuantumCircuit(self.num_qubits)
