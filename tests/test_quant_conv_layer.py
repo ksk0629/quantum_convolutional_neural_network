@@ -63,7 +63,7 @@ class TestQuantConvLayer:
         with pytest.raises(TypeError):
             QuantConvLayer(num_qubits=self.num_qubits, param_prefix=param_prefix)
 
-    @pytest.mark.parametrize("num_qubits", [1, 2, 10])
+    @pytest.mark.parametrize("num_qubits", [2, 6, 10])
     def test_get_circuit(self, num_qubits):
         """Normal test;
         Run the get_circuit function.
