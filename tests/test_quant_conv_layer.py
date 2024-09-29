@@ -54,7 +54,7 @@ class TestQuantConvLayer:
             QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
 
     @pytest.mark.parametrize("param_prefix", [1, 1.1, ["t e s t"]])
-    def test_init_with_wrong_non_str_param_prefix(self, param_prefix):
+    def test_init_with_non_str_param_prefix(self, param_prefix):
         """Abnormal test;
         Initialises the QuantConvLayer with non str param_prefix.
 
