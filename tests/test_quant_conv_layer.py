@@ -24,8 +24,8 @@ class TestQuantConvLayer:
         Initialises the QuantConvLayer with normal arguments.
 
         Check if
-        - the returned value has num_qubits variable begin the same as the argment.
-        - the returned value has param_prefix begin the same as the argment.
+        - the returned value has num_qubits variable being the same as the argment.
+        - the returned value has param_prefix being the same as the argment.
         """
         quant_conv_layer = QuantConvLayer(
             num_qubits=num_qubits, param_prefix=param_prefix
