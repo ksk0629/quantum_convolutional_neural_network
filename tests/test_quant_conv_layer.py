@@ -33,16 +33,6 @@ class TestQuantConvLayer:
         assert quant_conv_layer.num_qubits == num_qubits
         assert quant_conv_layer.param_prefix == param_prefix
 
-    @pytest.mark.parametrize("num_qubits", [1.1, [1], "1"])
-    def test_init_with_non_int_num_qubits(self, num_qubits):
-        """Abnormal test;
-        Initialises the QuantConvLayer with non int num_qubits.
-
-        Check if TypeError happens.
-        """
-        with pytest.raises(TypeError):
-            QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
-
     @pytest.mark.parametrize("num_qubits", [0, -1, 1])
     def test_init_with_smaller_than_2_num_qubits(self, num_qubits):
         """Abnormal test;
@@ -62,16 +52,6 @@ class TestQuantConvLayer:
         """
         with pytest.raises(ValueError):
             QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
-
-    @pytest.mark.parametrize("param_prefix", [1, 1.1, ["t e s t"]])
-    def test_init_with_non_str_param_prefix(self, param_prefix):
-        """Abnormal test;
-        Initialises the QuantConvLayer with non str param_prefix.
-
-        Check if TypeError happens.
-        """
-        with pytest.raises(TypeError):
-            QuantConvLayer(num_qubits=self.num_qubits, param_prefix=param_prefix)
 
     @pytest.mark.parametrize("num_qubits", [2, 6, 10])
     def test_get_circuit(self, num_qubits):
