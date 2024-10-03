@@ -14,6 +14,7 @@ class QuantConvLayer(BaseQuantLayer):
         :param str param_prefix: prefix strings of parameters
         :raises TypeError: if given num_qubits is not int type
         :raises ValueError: if given num_qubits is smaller than 2
+        :raises ValueError: if given num_qubits is odd
         :raises TypeError: if given param_preifx is not str
         """
         if not isinstance(num_qubits, int):
@@ -21,6 +22,9 @@ class QuantConvLayer(BaseQuantLayer):
             raise TypeError(msg)
         if num_qubits < 2:
             msg = f"num_qubits is must be greater than one, but {num_qubits}."
+            raise ValueError(msg)
+        if num_qubits % 2 != 0:
+            msg = f"num_qubits is must be even, but {num_qubits}."
             raise ValueError(msg)
         self.num_qubits = num_qubits
 

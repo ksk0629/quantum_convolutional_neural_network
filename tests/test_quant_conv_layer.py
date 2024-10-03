@@ -53,6 +53,16 @@ class TestQuantConvLayer:
         with pytest.raises(ValueError):
             QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
 
+    @pytest.mark.parametrize("num_qubits", [3, 5, 7])
+    def test_init_with_odd_num_qubits(self, num_qubits):
+        """Abnormal test;
+        Initialises the QuantConvLayer with odd num_qubits.
+
+        Check if ValueError happens.
+        """
+        with pytest.raises(ValueError):
+            QuantConvLayer(num_qubits=num_qubits, param_prefix=self.param_prefix)
+
     @pytest.mark.parametrize("param_prefix", [1, 1.1, ["t e s t"]])
     def test_init_with_non_str_param_prefix(self, param_prefix):
         """Abnormal test;
