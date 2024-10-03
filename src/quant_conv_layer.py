@@ -29,7 +29,7 @@ class QuantConvLayer(BaseQuantLayer):
             raise TypeError(msg)
         self.param_prefix = param_prefix
 
-    def __get_one_circuit(
+    def __get_pattern(
         self, params: qiskit.circuit.ParameterVector
     ) -> qiskit.QuantumCircuit:
         """Return the convolutional circuit."""
@@ -58,7 +58,7 @@ class QuantConvLayer(BaseQuantLayer):
         param_index = 0
         for q1, q2 in zip(qubits[0::2], qubits[1::2]):
             qc = qc.compose(
-                self.__get_one_circuit(params[param_index : (param_index + 3)]),
+                self.__get_pattern(params[param_index : (param_index + 3)]),
                 [q1, q2],
             )
             qc.barrier()
@@ -68,7 +68,7 @@ class QuantConvLayer(BaseQuantLayer):
                 qubits[1::2], qubits[2::2] + [0]
             ):  # [0]: To connect the last and first qubits.
                 qc = qc.compose(
-                    self.__get_one_circuit(params[param_index : (param_index + 3)]),
+                    self.__get_pattern(params[param_index : (param_index + 3)]),
                     [q1, q2],
                 )
                 qc.barrier()
