@@ -69,7 +69,7 @@ class ExampleQCNN:
         )
 
         self.weights = qiskit_algorithms.utils.algorithm_globals.random.random(
-            self.qnn.num_weights
+            self.estimator.num_weights
         )
 
     def __call__(self, input_data: np.ndarray):
