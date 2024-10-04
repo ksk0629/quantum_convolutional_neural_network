@@ -17,7 +17,11 @@ class QNNBuilder:
         """
         self.data_size = data_size
 
-    def get_example_qnn_estimator(self):
+    def get_example_estimator_qnn(self) -> EstimatorQNN:
+        """Get the EstimatorQNN introduced in the qiskit example.
+
+        :return EstimatorQNN: EstimatorQNN introduced in qiskit example
+        """
         # Create the feature map.
         feature_map = qiskit.circuit.library.ZFeatureMap(self.data_size)
 
