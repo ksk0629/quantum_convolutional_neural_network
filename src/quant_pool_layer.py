@@ -1,7 +1,7 @@
 import numpy as np
 import qiskit
 
-from .base_quant_layer import BaseQuantLayer
+from src.base_quant_layer import BaseQuantLayer
 
 
 class QuantPoolLayer(BaseQuantLayer):
