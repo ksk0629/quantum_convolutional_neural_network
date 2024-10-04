@@ -1,6 +1,4 @@
-import numpy as np
 import qiskit
-import qiskit_algorithms
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 
 from src.quant_conv_layer import QuantConvLayer
