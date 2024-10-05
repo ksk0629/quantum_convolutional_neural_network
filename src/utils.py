@@ -4,14 +4,14 @@ import qiskit_algorithms
 
 def generate_line_dataset(
     num_images: int,
+    image_shape: tuple[int, int] = (2, 4),
+    line_length: int = 2,
     line_pixel_value: float = np.pi / 2,
     min_noise_value: float = 0,
     max_noise_value: float = np.pi / 4,
 ):
     # Define the hyper-params.
-    image_shape = (2, 4)
     image_length = image_shape[0] * image_shape[1]  # The images are flattened to store.
-    line_len = 2
 
     # Create all horizontal line patters.
     hor_shape = (6, image_length)
