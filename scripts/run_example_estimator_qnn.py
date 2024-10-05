@@ -1,7 +1,6 @@
 import numpy as np
 import qiskit_algorithms
 from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
-from qiskit_machine_learning.neural_networks import EstimatorQNN
 from sklearn.model_selection import train_test_split
 
 from src.qnn_builder import QNNBuilder
