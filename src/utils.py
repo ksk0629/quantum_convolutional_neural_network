@@ -159,3 +159,12 @@ def get_all_vertical_patterns(
         patterns[index, :] = reshaped_pattern.flatten()
 
     return patterns
+
+
+def callback_print(weights: np.ndarray, obj_func_eval: float):
+    """Print the objective function value.
+
+    :param np.ndarray weights: current weights
+    :param float obj_func_eval: objective function value
+    """
+    print(f"current_value: {obj_func_eval}")
