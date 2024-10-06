@@ -31,6 +31,7 @@ def generate_line_dataset(
     max_noise_value: float = np.pi / 4,
 ) -> tuple[list[np.ndarray], list[np.ndarray]]:
     """Generate the line dataset.
+    The label of horizontal line is -1, otherwise +1.
 
     :param int num_images: number of images
     :param tuple[int, int] image_shape: image shape, defaults to (2, 4)
