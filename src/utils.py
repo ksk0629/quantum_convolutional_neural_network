@@ -62,20 +62,33 @@ def generate_line_dataset(
 def get_all_horizontal_patterns(
     image_shape: tuple[int, int], line_length: int, line_pixel_value: int
 ) -> np.ndarray:
-    """Get all horizontal patterns of the given image shape and length of the line.
+    """Get all horizontal patterns of the given image shape and length of the line as a flattened array.
 
     :param tuple[int, int] image_shape: image shape
     :param int line_length: length of line
     :param int line_pixel_value: value of line
-    :return np.ndarray: flattened all horizontal patterns
+    :return np.ndarray: all horizontal patterns as flattened
     """
+    # Make the trivial pattern, which the line is set from the head.
+    trivial_pattern = np.zeros(image_shape[1])
+    trivial_pattern[:line_length] = line_pixel_value
+    # Make the patterns for one line.
+    num_patterns_for_one_line = image_shape[1] - (line_length - 1)
+    patterns_for_one_line = np.zeros((num_patterns_for_one_line, image_shape[1]))
+    for index in range(num_patterns_for_one_line):
+        patterns_for_one_line[index, :] = np.roll(trivial_pattern, index)
+
+    # Put the patterns for one line to every line.
+    num_patterns = num_patterns_for_one_line * image_shape[0]
     image_length = image_shape[0] * image_shape[1]
-    hor_shape = (6, image_length)
-    hor_array = np.zeros(hor_shape)
-    j = 0
-    for i in range(0, 7):
-        if i != 3:
-            hor_array[j][i] = line_pixel_value
-            hor_array[j][i + 1] = line_pixel_value
-            j += 1
-    return hor_array
+    patterns = np.zeros((num_patterns, image_length))
+    for index in range(image_shape[0]):
+        start_row_index = index * num_patterns_for_one_line
+        end_row_index = start_row_index + num_patterns_for_one_line
+        start_column_index = index * image_shape[1]
+        end_column_index = start_column_index + image_shape[1]
+        patterns[start_row_index:end_row_index, start_column_index:end_column_index] = (
+            patterns_for_one_line
+        )
+
+    return patterns
