@@ -68,7 +68,14 @@ def get_all_horizontal_patterns(
     :param int line_length: length of line
     :param int line_pixel_value: value of line
     :return np.ndarray: all horizontal patterns as flattened
+    :raise ValueError: if given line_length is larger than given image_shape[1]
     """
+    if line_length > image_shape[1]:
+        msg = f"""
+            line_lenght must be equal to or less than image_shape[1],
+            but line_length vs image_shape[1] = {line_length} vs {image_shape[1]}.
+        """
+        raise ValueError(msg)
     # Make the trivial pattern, which the line is set from the head.
     trivial_pattern = np.zeros(image_shape[1])
     trivial_pattern[:line_length] = line_pixel_value
