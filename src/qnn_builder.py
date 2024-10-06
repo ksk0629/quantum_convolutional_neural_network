@@ -20,55 +20,7 @@ class QNNBuilder:
 
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example
         """
-        # Create the feature map.
-        feature_map = qiskit.circuit.library.ZFeatureMap(self.data_size)
-
-        # Create the ansatz.
-        ansatz = qiskit.QuantumCircuit(self.data_size, name="Ansatz")
-        ansatz.compose(
-            QuantConvLayer(8, "conv1").get_circuit(),
-            list(range(self.data_size)),
-            inplace=True,
-        )
-        ansatz.compose(
-            QuantPoolLayer([0, 1, 2, 3], [4, 5, 6, 7], "pool1").get_circuit(),
-            list(range(self.data_size)),
-            inplace=True,
-        )
-        ansatz.compose(
-            QuantConvLayer(4, "conv2").get_circuit(),
-            list(range(4, self.data_size)),
-            inplace=True,
-        )
-        ansatz.compose(
-            QuantPoolLayer([0, 1], [2, 3], "pool2").get_circuit(),
-            list(range(4, self.data_size)),
-            inplace=True,
-        )
-        ansatz.compose(
-            QuantConvLayer(2, "conv3").get_circuit(),
-            list(range(6, self.data_size)),
-            inplace=True,
-        )
-        ansatz.compose(
-            QuantPoolLayer([0], [1], "pool3").get_circuit(),
-            list(range(6, self.data_size)),
-            inplace=True,
-        )
-
-        # Combine the feature map and ansatz.
-        circuit = qiskit.QuantumCircuit(self.data_size)
-        circuit.compose(feature_map, range(self.data_size), inplace=True)
-        circuit.compose(ansatz, range(self.data_size), inplace=True)
-
-        observable = qiskit.quantum_info.SparsePauliOp.from_list([("Z" + "I" * 7, 1)])
-
-        return EstimatorQNN(
-            circuit=circuit.decompose(),
-            observables=observable,
-            input_params=feature_map.parameters,
-            weight_params=ansatz.parameters,
-        )
+        return self.get_example_structure_etimator_qcnn(8)
 
     def get_example_structure_etimator_qcnn(self) -> EstimatorQNN:
         """Get the QCNN having the structure as follows.
