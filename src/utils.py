@@ -10,9 +10,6 @@ def generate_line_dataset(
     min_noise_value: float = 0,
     max_noise_value: float = np.pi / 4,
 ):
-    # Define the hyper-params.
-    image_length = image_shape[0] * image_shape[1]  # The images are flattened to store.
-
     # Get all horizontal patterns.
     hor_array = get_all_horizontal_patterns(
         image_shape=image_shape,
@@ -21,13 +18,11 @@ def generate_line_dataset(
     )
 
     # Create all vertical line patterns.
-    ver_shape = (4, image_length)
-    ver_array = np.zeros(ver_shape)
-    j = 0
-    for i in range(0, 4):
-        ver_array[j][i] = line_pixel_value
-        ver_array[j][i + 4] = line_pixel_value
-        j += 1
+    ver_array = get_all_vertical_patterns(
+        image_shape=image_shape,
+        line_length=line_length,
+        line_pixel_value=line_pixel_value,
+    )
 
     # Generate random images.
     images = []
@@ -99,3 +94,18 @@ def get_all_horizontal_patterns(
         )
 
     return patterns
+
+
+def get_all_vertical_patterns(
+    image_shape: tuple[int, int], line_length: int, line_pixel_value: int
+):
+    image_length = image_shape[0] * image_shape[1]
+    ver_shape = (4, image_length)
+    ver_array = np.zeros(ver_shape)
+    j = 0
+    for i in range(0, 4):
+        ver_array[j][i] = line_pixel_value
+        ver_array[j][i + 4] = line_pixel_value
+        j += 1
+
+    return ver_array
