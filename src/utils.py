@@ -32,18 +32,19 @@ def generate_line_dataset(
         if rng == 0:
             labels.append(-1)
             random_image = qiskit_algorithms.utils.algorithm_globals.random.integers(
-                0, 6
+                0, hor_array.shape[0]
             )
             images.append(np.array(hor_array[random_image]))
         elif rng == 1:
             labels.append(1)
             random_image = qiskit_algorithms.utils.algorithm_globals.random.integers(
-                0, 4
+                0, ver_array.shape[0]
             )
             images.append(np.array(ver_array[random_image]))
 
         # Create noise.
-        for i in range(8):
+        image_length = image_shape[0] * image_shape[1]
+        for i in range(image_length):
             if images[-1][i] == 0:
                 images[-1][i] = (
                     qiskit_algorithms.utils.algorithm_globals.random.uniform(
