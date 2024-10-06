@@ -11,6 +11,13 @@ class TestUtils:
         cls.line_length = 2
         cls.line_pixel_value = np.pi / 2
 
+    def test_get_all_horizontal_patterns_with_self_args(self):
+        """Normal test;
+        Run get_all_horizontal_patterns with the example arguments,
+        which has already set in setup_class.
+
+        Check if the return value is the same as expected.
+        """
         # Define the correct horizontal patterns.
         correct_example_horizontal_patterns = np.asarray(
             [
@@ -24,9 +31,9 @@ class TestUtils:
         )
 
         horizontal_patterns = utils.get_all_horizontal_patterns(
-            image_shape=cls.image_shape,
-            line_length=cls.line_length,
-            line_pixel_value=cls.line_pixel_value,
+            image_shape=self.image_shape,
+            line_length=self.line_length,
+            line_pixel_value=self.line_pixel_value,
         )
         assert np.allclose(correct_example_horizontal_patterns, horizontal_patterns)
 
