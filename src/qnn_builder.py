@@ -28,10 +28,43 @@ class QNNBuilder:
         and then there are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
         until the number of active qubits is one.
         """
+        feature_map = self.__get_feature_map()
+        ansatz = self.__get_ansatz()
+
+        # Combine the feature map and ansatz.
+        circuit = qiskit.QuantumCircuit(self.data_size)
+        circuit.compose(feature_map, range(self.data_size), inplace=True)
+        circuit.compose(ansatz, range(self.data_size), inplace=True)
+
+        observable = qiskit.quantum_info.SparsePauliOp.from_list(
+            [("Z" + "I" * (self.data_size - 1), 1)]
+        )
+
+        return EstimatorQNN(
+            circuit=circuit.decompose(),
+            observables=observable,
+            input_params=feature_map.parameters,
+            weight_params=ansatz.parameters,
+        )
+
+    def __get_feature_map(self) -> qiskit.QuantumCircuit:
+        """Get the quantum circuit representing ZFeatureMap.
+
+        :return qiskit.QuantumCircuit: quantum circuit representing ZFeatureMap
+        """
         # Create the feature map.
         feature_map = qiskit.circuit.library.ZFeatureMap(self.data_size)
         feature_map.barrier()
 
+        return feature_map
+
+    def __get_ansatz(self) -> qiskit.QuantumCircuit:
+        """Get the quantum circuit having the following structure;
+        There are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
+        until the number of active qubits is one.
+
+        :return qiskit.QuantumCircuit: series of QuantConvLayer and QuantPoolLayer
+        """
         # Create the ansatz.
         current_data_size = self.data_size
         ansatz = qiskit.QuantumCircuit(current_data_size, name="Ansatz")
@@ -56,18 +89,4 @@ class QNNBuilder:
             # Update the index.
             index += 1
 
-        # Combine the feature map and ansatz.
-        circuit = qiskit.QuantumCircuit(self.data_size)
-        circuit.compose(feature_map, range(self.data_size), inplace=True)
-        circuit.compose(ansatz, range(self.data_size), inplace=True)
-
-        observable = qiskit.quantum_info.SparsePauliOp.from_list(
-            [("Z" + "I" * (self.data_size - 1), 1)]
-        )
-
-        return EstimatorQNN(
-            circuit=circuit.decompose(),
-            observables=observable,
-            input_params=feature_map.parameters,
-            weight_params=ansatz.parameters,
-        )
+        return ansatz
