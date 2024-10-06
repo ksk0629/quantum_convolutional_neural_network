@@ -1,5 +1,10 @@
+import random
+
 import numpy as np
+import qiskit_algorithms
 import pytest
+import torch
+
 import src.utils as utils
 
 
@@ -10,6 +15,31 @@ class TestUtils:
         cls.image_shape = (2, 4)
         cls.line_length = 2
         cls.line_pixel_value = np.pi / 2
+
+        cls.seed = 91
+
+    def test_fix_seed_with_self_args(self):
+        """Normal test;
+        Run fix_seed and generate random integers through each module and do the same thing.
+
+        Check if the generated integers are the same.
+        """
+        low = 0
+        high = 100000
+
+        utils.fix_seed(self.seed)
+        x_random = random.randint(low, high)
+        x_qiskit = qiskit_algorithms.utils.algorithm_globals.random.integers(low, high)
+        x_np = np.random.randint(low, high)
+        x_torch = torch.randint(low=low, high=high, size=(1,))
+
+        utils.fix_seed(self.seed)
+        assert x_random == random.randint(low, high)
+        assert x_qiskit == qiskit_algorithms.utils.algorithm_globals.random.integers(
+            low, high
+        )
+        assert x_np == np.random.randint(low, high)
+        assert x_torch == torch.randint(low=low, high=high, size=(1,))
 
     def test_get_all_horizontal_patterns_with_self_args(self):
         """Normal test;
