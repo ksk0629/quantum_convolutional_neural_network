@@ -28,7 +28,7 @@ class QNNBuilder:
         and then there are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
         until the number of active qubits is one.
         """
-        feature_map = self.__get_feature_map()
+        feature_map = self.__get_z_feature_map()
         ansatz = self.__get_ansatz()
 
         # Combine the feature map and ansatz.
@@ -47,7 +47,7 @@ class QNNBuilder:
             weight_params=ansatz.parameters,
         )
 
-    def __get_feature_map(self) -> qiskit.QuantumCircuit:
+    def __get_z_feature_map(self) -> qiskit.QuantumCircuit:
         """Get the quantum circuit representing ZFeatureMap.
 
         :return qiskit.QuantumCircuit: quantum circuit representing ZFeatureMap
