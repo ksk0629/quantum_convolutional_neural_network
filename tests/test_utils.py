@@ -95,7 +95,7 @@ class TestUtils:
         Check if
         - each pattern in the returned array has the same number of elements
             as the one calculated from the given image_shape.
-        - the return array has the given line_pixel_value or zeros.
+        each element of the return array is either the given line_pixel_value or zeros.
         - each pattern can be reshaped to the given image_shape.
         - the summation of each row of reshaped pattern is either zero
             or line_pixel_value * line_length.
@@ -167,7 +167,7 @@ class TestUtils:
         Check if
         - each pattern in the returned array has the same number of elements
             as the one calculated from the given image_shape.
-        - the return array has the given line_pixel_value or zeros.
+        - each element of the return array is either the given line_pixel_value or zeros.
         - each pattern can be reshaped to the given image_shape.
         - the summation of each column of reshaped pattern is either zero
             or line_pixel_value * line_length.
