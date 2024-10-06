@@ -67,8 +67,7 @@ def get_all_horizontal_patterns(
     :raise ValueError: if given line_length is larger than given image_shape[1]
     """
     if line_length > image_shape[1]:
-        msg = f"""
-            line_lenght must be equal to or less than image_shape[1],
+        msg = f"""line_lenght must be equal to or less than image_shape[1],
             but line_length vs image_shape[1] = {line_length} vs {image_shape[1]}.
         """
         raise ValueError(msg)
