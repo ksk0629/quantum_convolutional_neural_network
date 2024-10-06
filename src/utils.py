@@ -9,7 +9,18 @@ def generate_line_dataset(
     line_pixel_value: float = np.pi / 2,
     min_noise_value: float = 0,
     max_noise_value: float = np.pi / 4,
-):
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    """Generate the line dataset.
+
+    :param int num_images: number of images
+    :param tuple[int, int] image_shape: image shape, defaults to (2, 4)
+    :param int line_length: length of line, defaults to 2
+    :param float line_pixel_value: value of line, defaults to np.pi/2
+    :param float min_noise_value: minimum value for noise, defaults to 0
+    :param float max_noise_value: maximum value for noise, defaults to np.pi/4
+    :raises ValueError: if given line_length is larger than given image_shape[0] or image_shape[1]
+    :return tuple[list[np.ndarray], list[np.ndarray]]: images and their labels
+    """
     # Check if the given line_length is not greater than both image_shape.
     if line_length > image_shape[0] and line_length > image_shape[1]:
         msg = f"""line_length must be equal to or less than both length of image_shape,
@@ -69,8 +80,8 @@ def get_all_horizontal_patterns(
     :param tuple[int, int] image_shape: image shape
     :param int line_length: length of line
     :param int line_pixel_value: value of line
+    :raises ValueError: if given line_length is larger than given image_shape[1]
     :return np.ndarray: all horizontal patterns as flattened
-    :raise ValueError: if given line_length is larger than given image_shape[1]
     """
     if line_length > image_shape[1]:
         msg = f"""line_lenght must be equal to or less than image_shape[1],
