@@ -98,14 +98,26 @@ def get_all_horizontal_patterns(
 
 def get_all_vertical_patterns(
     image_shape: tuple[int, int], line_length: int, line_pixel_value: int
-):
-    image_length = image_shape[0] * image_shape[1]
-    ver_shape = (4, image_length)
-    ver_array = np.zeros(ver_shape)
-    j = 0
-    for i in range(0, 4):
-        ver_array[j][i] = line_pixel_value
-        ver_array[j][i + 4] = line_pixel_value
-        j += 1
+) -> np.ndarray:
+    """Get all vertical patterns of the given image shape and length of the line as a flattened array by using get_all_horizontal_patterns.
 
-    return ver_array
+    :param tuple[int, int] image_shape: image shape
+    :param int line_length: length of line
+    :param int line_pixel_value: value of line
+    :return np.ndarray: all vertical patterns as flattened
+    """
+    # Get all horizontal patterns of the transposed image shape.
+    new_image_shape = (image_shape[1], image_shape[0])
+    transposed_patterns = get_all_horizontal_patterns(
+        image_shape=new_image_shape,
+        line_length=line_length,
+        line_pixel_value=line_pixel_value,
+    )
+    # Transpose each horizontal pattern so that it is the original vertical pattern.
+    patterns = np.zeros(transposed_patterns.shape)
+    for index, transposed_pattern in enumerate(transposed_patterns):
+        reshaped_transposed_pattern = transposed_pattern.reshape(new_image_shape)
+        reshaped_pattern = reshaped_transposed_pattern.T
+        patterns[index, :] = reshaped_pattern.flatten()
+
+    return patterns
