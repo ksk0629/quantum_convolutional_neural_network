@@ -10,6 +10,12 @@ def generate_line_dataset(
     min_noise_value: float = 0,
     max_noise_value: float = np.pi / 4,
 ):
+    # Check if the given line_length is not greater than both image_shape.
+    if line_length > image_shape[0] and line_length > image_shape[1]:
+        msg = f"""line_length must be equal to or less than both length of image_shape,
+        but line_length vs image_shape = {line_length} vs {image_shape}"""
+        raise ValueError(msg)
+
     # Get all horizontal patterns.
     hor_array = get_all_horizontal_patterns(
         image_shape=image_shape,
