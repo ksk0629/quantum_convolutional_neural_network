@@ -1,4 +1,5 @@
 import argparse
+import os
 import yaml
 
 import numpy as np
@@ -66,8 +67,12 @@ if __name__ == "__main__":
     y = np.asarray(test_labels)
     print(f"Accuracy from the test data: {np.round(100 * classifier.score(x, y), 2)}%")
 
+    model_path = config["train"]["model_path"]
+    # Create the directory.
+    dir_path = os.path.dirname(model_path)
+    if os.path.isdir(dir_path):
+        os.makedirs(dir_path)
     # Save the model.
-    model_path = "models/example_qnn.model"
     classifier.save(model_path)
 
     # Load the saved model as the test.
