@@ -18,7 +18,7 @@ class QNNBuilder:
         """
         return self.get_example_structure_etimator_qcnn(8)
 
-    def get_example_structure_etimator_qnn(self, data_size: int) -> EstimatorQNN:
+    def get_example_structure_estimator_qnn(self, data_size: int) -> EstimatorQNN:
         """Get the QCNN having the structure as follows.
         First, there is the ZFeatureMap,
         and then there are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
