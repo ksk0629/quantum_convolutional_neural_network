@@ -16,7 +16,7 @@ class QNNBuilder:
 
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example
         """
-        return self.get_example_structure_etimator_qcnn(8)
+        return self.get_example_structure_estimator_qnn(8)
 
     def get_example_structure_estimator_qnn(self, data_size: int) -> EstimatorQNN:
         """Get the QCNN having the structure as follows.
@@ -26,8 +26,8 @@ class QNNBuilder:
 
         :param int data_size: data size
         """
-        feature_map = self.__get_z_feature_map()
-        ansatz = self.__get_ansatz()
+        feature_map = self.__get_z_feature_map(data_size=data_size)
+        ansatz = self.__get_ansatz(data_size=data_size)
 
         # Combine the feature map and ansatz.
         circuit = qiskit.QuantumCircuit(data_size)
