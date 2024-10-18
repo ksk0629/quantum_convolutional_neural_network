@@ -16,7 +16,7 @@ if __name__ == "__main__":
     )
 
     # Get the qiskit example QNN.
-    example_estimator_qnn = QNNBuilder(len(train_images[0])).get_example_estimator_qnn()
+    example_estimator_qnn = QNNBuilder().get_example_estimator_qnn()
 
     # Create the classifier.
     classifier = NeuralNetworkClassifier(

@@ -39,9 +39,9 @@ if __name__ == "__main__":
 
     # Get the qiskit example QNN.
     print("Building the model...", end="")
-    example_estimator_qnn = QNNBuilder(
+    example_estimator_qnn = QNNBuilder().get_example_structure_etimator_qnn(
         len(train_images[0])
-    ).get_example_structure_etimator_qnn()
+    )
     print("Done.")
 
     # Create the classifier.
