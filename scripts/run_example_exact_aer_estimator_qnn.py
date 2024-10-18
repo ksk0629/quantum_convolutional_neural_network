@@ -4,9 +4,12 @@ from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifi
 from sklearn.model_selection import train_test_split
 
 from src.qnn_builder import QNNBuilder
-from src.utils import generate_line_dataset
+from src.utils import fix_seed, generate_line_dataset
 
 if __name__ == "__main__":
+    # Fix the random seed.
+    fix_seed(91)
+
     # Get the dataset.
     images, labels = generate_line_dataset(50)
 

@@ -7,6 +7,9 @@ from src.qnn_builder import QNNBuilder
 from src.utils import generate_line_dataset
 
 if __name__ == "__main__":
+    # Fix the random seed.
+    fix_seed(91)
+
     # Get the dataset.
     images, labels = generate_line_dataset(50)
 
