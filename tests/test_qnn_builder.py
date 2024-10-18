@@ -27,10 +27,10 @@ class TestQNNBuilder:
         """
         self.qnn_builder.get_example_structure_estimator_qnn(data_size)
 
-    def test_get_example_aer_exact_estimator_qnn(self):
+    def test_get_example_exact_aer_estimator_qnn(self):
         """Normal test;
-        Runs get_example_aer_exact_estimator_qnn.
+        Runs get_example_exact_aer_estimator_qnn.
 
         Check if no error happens.
         """
-        self.qnn_builder.get_example_aer_exact_estimator_qnn()
+        self.qnn_builder.get_example_exact_aer_estimator_qnn()

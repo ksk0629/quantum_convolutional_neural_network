@@ -20,7 +20,7 @@ class QNNBuilder:
         """
         return self.get_example_structure_estimator_qnn(8)
 
-    def get_example_aer_exact_estimator_qnn(self) -> EstimatorQNN:
+    def get_example_exact_aer_estimator_qnn(self) -> EstimatorQNN:
         """Get the EstimatorWNN introduced in the qiskit example with the exact estimator from qiskit_aer.
 
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer.
