@@ -20,18 +20,25 @@ class QNNBuilder:
         """
         return self.get_example_structure_estimator_qnn(8)
 
-    def get_example_exact_aer_estimator_qnn(self) -> EstimatorQNN:
+    def get_example_exact_aer_estimator_qnn(
+        self, seed: None | int = 91
+    ) -> EstimatorQNN:
         """Get the EstimatorWNN introduced in the qiskit example with the exact estimator from qiskit_aer.
 
+        :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer
         """
         return self.get_example_structure_estimator_qnn(
-            8, qiskit_aer.primitives.Estimator()
+            8,
+            qiskit_aer.primitives.Estimator(backend_options=dict(seed_simulator=seed)),
         )
 
-    def get_example_noisy_aer_estimator_qnn(self) -> EstimatorQNN:
+    def get_example_noisy_aer_estimator_qnn(
+        self, seed: None | int = 91
+    ) -> EstimatorQNN:
         """Get the EstimatorWNN introduced in the qiskit example with a noisy estimator from qiskit_aer.
 
+        :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with a noisy estimator from qiskit_aer
         """
         noise_model = qiskit_aer.noise.NoiseModel()
@@ -41,7 +48,7 @@ class QNNBuilder:
         )
 
         noisy_estimator = qiskit_aer.primitives.Estimator(
-            backend_options=dict(noise_model=noise_model)
+            backend_options=dict(noise_model=noise_model, seed_simulator=seed)
         )
 
         return self.get_example_structure_estimator_qnn(8, noisy_estimator)
