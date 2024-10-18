@@ -42,3 +42,12 @@ class TestQNNBuilder:
         Check if no error happens.
         """
         self.qnn_builder.get_example_noisy_aer_estimator_qnn()
+
+    def test_get_example_ibm_runtime_estimator_qnn(self):
+        """Normal test;
+        Runs get_example_ibm_runtime_estimator_qnn.
+
+        Check if no error happens.
+        """
+        config_path = "./configs/_ibm_account.yaml"
+        self.qnn_builder.get_example_ibm_runtime_estimator_qnn(config_path=config_path)
