@@ -1,6 +1,9 @@
+import yaml
+
 import qiskit
 import qiskit_aer
 import qiskit_aer.primitives
+import qiskit_ibm_runtime
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 
 from src.quant_conv_layer import QuantConvLayer
@@ -52,6 +55,26 @@ class QNNBuilder:
         )
 
         return self.get_example_structure_estimator_qnn(8, noisy_estimator)
+
+    def get_example_ibm_runtime_estimator_qnn(self, config_path: str) -> EstimatorQNN:
+        """Get the EstimatorWNN introduced in the qiskit example with a real ibm quantum hardware.
+
+        :param str config_path: path to config file including my ibm quantum token
+        :return EstimatorQNN: EstimatorQNN introduced in qiskit example with real ibm quantum hardware
+        """
+        # Read my ibm quantum token.
+        with open(config_path, "r") as yaml_file:
+            config = yaml.safe_load(yaml_file)
+        ibm_quantum_token = config["my_ibm_quantum_token"]
+
+        # Get the estimator being able to access to a real hardware.
+        service = qiskit_ibm_runtime.QiskitRuntimeService(
+            channel="ibm_quantum", token=ibm_quantum_token
+        )
+        backend = service.least_busy(operational=True, simulator=False)
+        real_hardware_estimator = qiskit_ibm_runtime.Estimator(mode=backend)
+
+        return self.get_example_structure_estimator_qnn(8, real_hardware_estimator)
 
     def get_example_structure_estimator_qnn(
         self, data_size: int, estimator: None | qiskit.primitives.BaseEstimator = None
