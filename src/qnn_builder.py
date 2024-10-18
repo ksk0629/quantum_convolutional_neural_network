@@ -1,5 +1,6 @@
 import qiskit
 from qiskit_machine_learning.neural_networks import EstimatorQNN
+from qiskit.primitives import BaseEstimatorV2
 
 from src.quant_conv_layer import QuantConvLayer
 from src.quant_pool_layer import QuantPoolLayer
@@ -18,13 +19,17 @@ class QNNBuilder:
         """
         return self.get_example_structure_estimator_qnn(8)
 
-    def get_example_structure_estimator_qnn(self, data_size: int) -> EstimatorQNN:
+    def get_example_structure_estimator_qnn(
+        self, data_size: int, estimator: None | BaseEstimatorV2 = None
+    ) -> EstimatorQNN:
         """Get the QCNN having the structure as follows.
         First, there is the ZFeatureMap,
         and then there are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
         until the number of active qubits is one.
 
         :param int data_size: data size
+        :param None | BaseEstimatorV2 estimator: estimator primitive, defaults to None
+        :return EstimatorQNN: EstimatorQNN having structure introduced in qiskit example
         """
         feature_map = self.__get_z_feature_map(data_size=data_size)
         ansatz = self.__get_ansatz(data_size=data_size)
@@ -39,6 +44,7 @@ class QNNBuilder:
         )
 
         return EstimatorQNN(
+            estimator=estimator,
             circuit=circuit.decompose(),
             observables=observable,
             input_params=feature_map.parameters,
