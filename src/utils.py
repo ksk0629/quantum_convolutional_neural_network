@@ -19,7 +19,7 @@ def fix_seed(seed: int):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    qiskit_algorithms.utils.algorithm_globals.random_seed = 12345
+    qiskit_algorithms.utils.algorithm_globals.random_seed = seed
 
 
 def generate_line_dataset(
