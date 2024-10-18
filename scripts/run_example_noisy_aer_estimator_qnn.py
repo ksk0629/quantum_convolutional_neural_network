@@ -20,7 +20,7 @@ if __name__ == "__main__":
     )
 
     # Get the qiskit example QNN.
-    example_estimator_qnn = QNNBuilder().get_example_estimator_qnn()
+    example_estimator_qnn = QNNBuilder().get_example_noisy_aer_estimator_qnn(seed=seed)
 
     # Create the classifier.
     classifier = NeuralNetworkClassifier(
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     print(f"Accuracy from the test data: {np.round(100 * classifier.score(x, y), 2)}%")
 
     # Save the model.
-    model_path = "models/example_qnn.model"
+    model_path = "models/example_qnn_with_noisy_aer.model"
     classifier.save(model_path)
 
     # Load the saved model as the test.

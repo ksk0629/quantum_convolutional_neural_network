@@ -1,3 +1,6 @@
+# Private
+configs/_ibm_account.yaml
+
 # poetry
 poetry.lock
 
