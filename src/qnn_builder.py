@@ -1,6 +1,6 @@
 import qiskit
-from qiskit_aer.noise import NoiseModel, depolarizing_error
-from qiskit_aer.primitives import EstimatorV2 as AerEstimator
+import qiskit_aer
+import qiskit_aer.primitives
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 from qiskit.primitives import BaseEstimatorV2
 
@@ -26,20 +26,22 @@ class QNNBuilder:
 
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer
         """
-        return self.get_example_structure_estimator_qnn(8, AerEstimator())
+        return self.get_example_structure_estimator_qnn(
+            8, qiskit_aer.primitives.EstimatorV2()
+        )
 
     def get_example_noisy_aer_estimator_qnn(self) -> EstimatorQNN:
         """Get the EstimatorWNN introduced in the qiskit example with a noisy estimator from qiskit_aer.
 
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with a noisy estimator from qiskit_aer
         """
-        noise_model = NoiseModel()
+        noise_model = qiskit_aer.noise.NoiseModel()
         cx_depolarizing_prob = 0.02
         noise_model.add_all_qubit_quantum_error(
-            depolarizing_error(cx_depolarizing_prob, 2), ["cx"]
+            qiskit_aer.noise.depolarizing_error(cx_depolarizing_prob, 2), ["cx"]
         )
 
-        noisy_estimator = AerEstimator(
+        noisy_estimator = qiskit_aer.primitives.EstimatorV2(
             options=dict(backend_options=dict(noise_model=noise_model))
         )
 
