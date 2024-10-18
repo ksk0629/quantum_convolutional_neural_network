@@ -1,4 +1,5 @@
 import qiskit
+from qiskit_aer.primitives import EstimatorV2 as AerEstimator
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 from qiskit.primitives import BaseEstimatorV2
 
@@ -18,6 +19,13 @@ class QNNBuilder:
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example
         """
         return self.get_example_structure_estimator_qnn(8)
+
+    def get_example_aer_exact_estimator_qnn(self) -> EstimatorQNN:
+        """Get the EstimatorWNN introduced in the qiskit example with the exact estimator from qiskit_aer.
+
+        :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer.
+        """
+        return self.get_example_structure_estimator_qnn(8, AerEstimator())
 
     def get_example_structure_estimator_qnn(
         self, data_size: int, estimator: None | BaseEstimatorV2 = None
