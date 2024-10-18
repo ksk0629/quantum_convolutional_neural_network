@@ -2,7 +2,6 @@ import qiskit
 import qiskit_aer
 import qiskit_aer.primitives
 from qiskit_machine_learning.neural_networks import EstimatorQNN
-from qiskit.primitives import BaseEstimatorV2
 
 from src.quant_conv_layer import QuantConvLayer
 from src.quant_pool_layer import QuantPoolLayer
@@ -27,7 +26,7 @@ class QNNBuilder:
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer
         """
         return self.get_example_structure_estimator_qnn(
-            8, qiskit_aer.primitives.EstimatorV2()
+            8, qiskit_aer.primitives.Estimator()
         )
 
     def get_example_noisy_aer_estimator_qnn(self) -> EstimatorQNN:
@@ -41,14 +40,14 @@ class QNNBuilder:
             qiskit_aer.noise.depolarizing_error(cx_depolarizing_prob, 2), ["cx"]
         )
 
-        noisy_estimator = qiskit_aer.primitives.EstimatorV2(
-            options=dict(backend_options=dict(noise_model=noise_model))
+        noisy_estimator = qiskit_aer.primitives.Estimator(
+            backend_options=dict(noise_model=noise_model)
         )
 
         return self.get_example_structure_estimator_qnn(8, noisy_estimator)
 
     def get_example_structure_estimator_qnn(
-        self, data_size: int, estimator: None | BaseEstimatorV2 = None
+        self, data_size: int, estimator: None | qiskit.primitives.BaseEstimator = None
     ) -> EstimatorQNN:
         """Get the QCNN having the structure as follows.
         First, there is the ZFeatureMap,
@@ -56,7 +55,7 @@ class QNNBuilder:
         until the number of active qubits is one.
 
         :param int data_size: data size
-        :param None | BaseEstimatorV2 estimator: estimator primitive, defaults to None
+        :param None | BaseEstimator estimator: estimator primitive, defaults to None
         :return EstimatorQNN: EstimatorQNN having structure introduced in qiskit example
         """
         feature_map = self.__get_z_feature_map(data_size=data_size)
