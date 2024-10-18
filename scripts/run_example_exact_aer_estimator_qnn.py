@@ -4,7 +4,7 @@ from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifi
 from sklearn.model_selection import train_test_split
 
 from src.qnn_builder import QNNBuilder
-from src.utils import fix_seed, generate_line_dataset
+from src.utils import fix_seed, generate_line_dataset, callback_print
 
 if __name__ == "__main__":
     # Fix the random seed.
@@ -26,6 +26,7 @@ if __name__ == "__main__":
     classifier = NeuralNetworkClassifier(
         example_estimator_qnn,
         optimizer=qiskit_algorithms.optimizers.COBYLA(maxiter=200),
+        callback=callback_print,
     )
     # Fit the model.
     x = np.asarray(train_images)
