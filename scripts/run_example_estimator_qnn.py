@@ -8,14 +8,15 @@ from src.utils import fix_seed, generate_line_dataset
 
 if __name__ == "__main__":
     # Fix the random seed.
-    fix_seed(91)
+    seed = 91
+    fix_seed(seed)
 
     # Get the dataset.
     images, labels = generate_line_dataset(50)
 
     # Get the training and testing datasets.
     train_images, test_images, train_labels, test_labels = train_test_split(
-        images, labels, test_size=0.3, random_state=91
+        images, labels, test_size=0.3, random_state=seed
     )
 
     # Get the qiskit example QNN.
