@@ -2,12 +2,11 @@ import argparse
 import os
 import yaml
 
-import numpy as np
 import qiskit_algorithms
-from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
 from sklearn.model_selection import train_test_split
 
 from src.qnn_builder import QNNBuilder
+from src.qnn_trainer import QNNTrainer
 from src.utils import fix_seed, generate_line_dataset, callback_print
 
 if __name__ == "__main__":
@@ -20,65 +19,124 @@ if __name__ == "__main__":
     # Read the given config file.
     with open(args.config_yaml_path, "r") as config_yaml:
         config = yaml.safe_load(config_yaml)
+    config_general = config["general"]
+    config_dataset = config["dataset"]
+    config_model = config["model"]
+    config_train = config["train"]
 
     # Fix the random seed.
-    fix_seed(config["train"]["random_seed"])
+    fix_seed(config_general["random_seed"])
 
-    # >>> Dataset >>>
-    print("Generating the dataset...", end="")
-    images, labels = generate_line_dataset(**config["dataset"])
-    print("Done.")
+    # Create the dataset.
+    images, labels = generate_line_dataset(**config_dataset["generating"])
+    print("Generated the dataset.")
 
     # Get the training and testing datasets.
     train_images, test_images, train_labels, test_labels = train_test_split(
         images,
         labels,
-        test_size=config["train"]["test_size"],
-        random_state=config["train"]["random_seed"],
+        test_size=config_dataset["settings"]["test_size"],
+        random_state=config_general["random_seed"],
     )
 
-    # Get the qiskit example QNN.
-    print("Building the model...", end="")
-    example_estimator_qnn = QNNBuilder().get_example_structure_etimator_qnn(
-        len(train_images[0])
-    )
-    print("Done.")
+    # Get the QNN.
+    match config_model["mode"]:
+        case "example_estimator":
+            qnn = QNNBuilder().get_example_structure_estimator_qnn(len(train_images[0]))
+        case "exact_aer_estimator":
+            qnn = QNNBuilder().get_exact_aer_estimator_qnn(len(train_images[0]))
+        case "noisy_aer_estimator":
+            qnn = QNNBuilder().get_noisy_aer_estimator_qnn(len(train_images[0]))
+        case "example_sampler":
+            qnn = QNNBuilder().get_example_structure_sampler_qnn(len(train_images[0]))
+        case "exact_aer_sampler":
+            qnn = QNNBuilder().get_exact_aer_sampler_qnn(len(train_images[0]))
+        case "noisy_aer_sampler":
+            qnn = QNNBuilder().get_noisy_aer_sampler_qnn(len(train_images[0]))
+    print(f"Built the QNN, given mode: {config_model["mode"]}.")
 
     # Create the classifier.
-    classifier = NeuralNetworkClassifier(
-        example_estimator_qnn,
-        optimizer=qiskit_algorithms.optimizers.COBYLA(
-            maxiter=config["train"]["maxiter"]
-        ),
+    qnn_trainer = QNNTrainer(
+        qnn=qnn,
+        train_data=train_images,
+        train_labels=train_labels,
+        test_data=test_images,
+        test_labels=test_labels,
         callback=callback_print,
+        seed=None,  # Already fixed.
     )
-    # Fit the model.
-    print("Fitting the model...", end="")
-    x = np.asarray(train_images)
-    y = np.asarray(train_labels)
-    classifier.fit(x, y)
-    print("Done.")
-    print(
-        f"Accuracy from the train data : {np.round(100 * classifier.score(x, y), 2)}%"
-    )
+    print("Built the QNNTrainer.")
 
-    # Test the model.
-    x = np.asarray(test_images)
-    y = np.asarray(test_labels)
-    print(f"Accuracy from the test data: {np.round(100 * classifier.score(x, y), 2)}%")
-
-    model_path = config["train"]["model_path"]
-    # Create the directory.
+    # Create the directory to save the model.
+    model_path = config_train["model_path"]
     dir_path = os.path.dirname(model_path)
     if os.path.isdir(dir_path):
         os.makedirs(dir_path)
-    # Save the model.
-    classifier.save(model_path)
-
-    # Load the saved model as the test.
-    save_classifier = NeuralNetworkClassifier.load(model_path)
-
-    # Test the saved model as the test.
+    # Fit the model.
+    match config_train["optimiser"]:
+        # --- Local optimisers ---
+        case "adam":
+            optimiser = qiskit_algorithms.optimizers.ADAM
+        case "adgd":
+            optimiser = qiskit_algorithms.optimizers.ADGS
+        case "cg":
+            optimiser = qiskit_algorithms.optimizers.CG
+        case "cobyla":
+            optimiser = qiskit_algorithms.optimizers.COBYLA
+        case "l_bfgs_b":
+            optimiser = qiskit_algorithms.optimizers.L_BFGS_B
+        case "gsls":
+            optimiser = qiskit_algorithms.optimizers.GSLS
+        case "gradient_descent":
+            optimiser = qiskit_algorithms.optimizers.GradientDescent
+        case "gradient_descent_state":
+            optimiser = qiskit_algorithms.optimizers.GradientDescentState
+        case "nelder_mead":
+            optimiser = qiskit_algorithms.optimizers.NELDER_MEAD
+        case "nft":
+            optimiser = qiskit_algorithms.optimizers.NFT
+        case "p_bfgs":
+            optimiser = qiskit_algorithms.optimizers.P_BFGS
+        case "powell":
+            optimiser = qiskit_algorithms.optimizers.POWELL
+        case "slsqp":
+            optimiser = qiskit_algorithms.optimizers.COBYLA
+        case "spsa":
+            optimiser = qiskit_algorithms.optimizers.SPSA
+        case "qnspsa":
+            optimiser = qiskit_algorithms.optimizers.QNSPSA
+        case "tnc":
+            optimiser = qiskit_algorithms.optimizers.TNC
+        case "scipy_optimiser":
+            optimiser = qiskit_algorithms.optimizers.SciPyOptimiser
+        case "umda":
+            optimiser = qiskit_algorithms.optimizers.UMDA
+        case "bobyqa":
+            optimiser = qiskit_algorithms.optimizers.BOBYQN
+        case "imfil":
+            optimiser = qiskit_algorithms.optimizers.IMFIL
+        case "snobfit":
+            optimiser = qiskit_algorithms.optimizers.SNOBFIT
+        # --- global optimisers ---
+        case "crs":
+            optimiser = qiskit_algorithms.optimizers.CRS
+        case "direct_l":
+            optimiser = qiskit_algorithms.optimizers.DIRECT_L
+        case "direct_l_rand":
+            optimiser = qiskit_algorithms.optimizers.DIRECT_L_RAND
+        case "esch":
+            optimiser = qiskit_algorithms.optimizers.ESCH
+        case "isres":
+            optimiser = qiskit_algorithms.ISRES
+        case _:
+            optimiser = None
     print(
-        f"Accuracy from the test data: {np.round(100 * save_classifier.score(x, y), 2)}%"
+        f"Get optimiser, given optimiser: {config_train["optimiser"]}, the instance: {optimiser}."
+    )
+
+    qnn_trainer.fit(
+        model_path=model_path,
+        optimiser=optimiser,
+        loss=config_train["loss"],
+        optimiser_settings=config_train["optimiser_settings"],
     )

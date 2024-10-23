@@ -1,12 +1,20 @@
-dataset:
-  num_images: 50
-  image_shape: [4, 4]
-  line_length: 3
-  line_pixel_value: 2
-  min_noise_value: 0
-  max_noise_value: 1
-train:
-  test_size: 0.3
+general:
   random_seed: 91
-  maxiter: 500
+dataset:
+  generating:
+    num_images: 50
+    image_shape: [4, 4]
+    line_length: 2
+    line_pixel_value: 2
+    min_noise_value: 0
+    max_noise_value: 1
+  settings:
+    test_size: 0.3
+model:
+  mode: "example_estimator"
+train:
+  loss: "squared_error"
+  optimiser: "cobyla"
+  optimiser_settings:
+    maxiter: 1
   model_path: "./models/examples/example.model"
