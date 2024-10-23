@@ -158,6 +158,24 @@ class QNNBuilder:
             qiskit_aer.primitives.Sampler(backend_options=dict(seed_simulator=seed)),
         )
 
+    def get_example_noisy_aer_sampler_qnn(self, seed: None | int = 91) -> SamplerQNN:
+        """Get the SamplerQNN introduced in the qiskit example with a noisy sampler from qiskit_aer.
+
+        :param None | int seed: random seed
+        :return SamplerQNN: SamplerQNN introduced in qiskit example with a noisy sampler from qiskit_aer
+        """
+        noise_model = qiskit_aer.noise.NoiseModel()
+        cx_depolarizing_prob = 0.02
+        noise_model.add_all_qubit_quantum_error(
+            qiskit_aer.noise.depolarizing_error(cx_depolarizing_prob, 2), ["cx"]
+        )
+
+        noisy_sampler = qiskit_aer.primitives.Sampler(
+            backend_options=dict(noise_model=noise_model, seed_simulator=seed)
+        )
+
+        return self.get_example_structure_sampler_qnn(8, noisy_sampler)
+
     def __get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
         """Get the quantum circuit representing ZFeatureMap.
 
