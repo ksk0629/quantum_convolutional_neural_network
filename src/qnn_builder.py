@@ -23,24 +23,26 @@ class QNNBuilder:
         """
         return self.get_example_structure_estimator_qnn(8)
 
-    def get_example_exact_aer_estimator_qnn(
-        self, seed: None | int = 91
+    def get_exact_aer_estimator_qnn(
+        self, data_size: int, seed: None | int = 91
     ) -> EstimatorQNN:
-        """Get the EstimatorQNN introduced in the qiskit example with the exact estimator from qiskit_aer.
+        """Get the EstimatorQNN with the exact estimator from qiskit_aer.
 
+        :param int data_size: data size
         :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer
         """
         return self.get_example_structure_estimator_qnn(
-            8,
+            data_size,
             qiskit_aer.primitives.Estimator(backend_options=dict(seed_simulator=seed)),
         )
 
-    def get_example_noisy_aer_estimator_qnn(
-        self, seed: None | int = 91
+    def get_noisy_aer_estimator_qnn(
+        self, data_size: int, seed: None | int = 91
     ) -> EstimatorQNN:
-        """Get the EstimatorQNN introduced in the qiskit example with a noisy estimator from qiskit_aer.
+        """Get the EstimatorQNN with a noisy estimator from qiskit_aer.
 
+        :param int data_size: data size
         :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with a noisy estimator from qiskit_aer
         """
@@ -54,7 +56,7 @@ class QNNBuilder:
             backend_options=dict(noise_model=noise_model, seed_simulator=seed)
         )
 
-        return self.get_example_structure_estimator_qnn(8, noisy_estimator)
+        return self.get_example_structure_estimator_qnn(data_size, noisy_estimator)
 
     def get_example_ibm_runtime_estimator_qnn(self, config_path: str) -> EstimatorQNN:
         """Get the EstimatorQNN introduced in the qiskit example with a real ibm quantum hardware.
@@ -147,20 +149,26 @@ class QNNBuilder:
             output_shape=output_shape,
         )
 
-    def get_example_exact_aer_sampler_qnn(self, seed: None | int = 91) -> SamplerQNN:
-        """Get the SamplerQNN introduced in the qiskit example with the exact sampler from qiskit_aer.
+    def get_exact_aer_sampler_qnn(
+        self, data_size: int, seed: None | int = 91
+    ) -> SamplerQNN:
+        """Get the SamplerQNN with the exact sampler from qiskit_aer.
 
+        :param int data_size: data size
         :param None | int seed: random seed
         :return SamplerQNN: SamplerQNN introduced in qiskit example with the exact sampler from qiskit_aer
         """
         return self.get_example_structure_sampler_qnn(
-            8,
+            data_size,
             qiskit_aer.primitives.Sampler(backend_options=dict(seed_simulator=seed)),
         )
 
-    def get_example_noisy_aer_sampler_qnn(self, seed: None | int = 91) -> SamplerQNN:
-        """Get the SamplerQNN introduced in the qiskit example with a noisy sampler from qiskit_aer.
+    def get_noisy_aer_sampler_qnn(
+        self, data_size: int, seed: None | int = 91
+    ) -> SamplerQNN:
+        """Get the SamplerQNN with a noisy sampler from qiskit_aer.
 
+        :param int data_size: data size
         :param None | int seed: random seed
         :return SamplerQNN: SamplerQNN introduced in qiskit example with a noisy sampler from qiskit_aer
         """
@@ -174,7 +182,7 @@ class QNNBuilder:
             backend_options=dict(noise_model=noise_model, seed_simulator=seed)
         )
 
-        return self.get_example_structure_sampler_qnn(8, noisy_sampler)
+        return self.get_example_structure_sampler_qnn(data_size, noisy_sampler)
 
     def __get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
         """Get the quantum circuit representing ZFeatureMap.
