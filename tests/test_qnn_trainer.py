@@ -1,7 +1,11 @@
+import os
+
 import numpy as np
 import pytest
+from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
 from qiskit_machine_learning.circuit.library import QNNCircuit
 from qiskit_machine_learning.neural_networks import SamplerQNN, EstimatorQNN
+
 
 from src.qnn_trainer import QNNTrainer
 
@@ -15,7 +19,7 @@ class TestQNNTrainer:
         cls.estimator_qnn = EstimatorQNN(circuit=qc)
         cls.sampler_qnn = SamplerQNN(circuit=qc)
         cls.optimiser = None
-        cls.loss = None
+        cls.loss = "squared_error"
         cls.initial_point = None
         cls.callback = None
 
@@ -79,3 +83,14 @@ class TestQNNTrainer:
         assert self.qnn_trainer_sampler.initial_point == self.initial_point
         assert self.qnn_trainer_sampler.callback == self.callback
         assert self.qnn_trainer_sampler.seed == self.seed
+
+    def test_fit(self, tmp_path):
+        optimiser_settings = {"maxiter": 1}
+
+        unique_estimator_path = f"{tmp_path}/estimator.model"
+        self.qnn_trainer_estimator.fit(unique_estimator_path, optimiser_settings)
+        NeuralNetworkClassifier.load(unique_estimator_path)
+
+        unique_sampler_path = f"{tmp_path}/sampler.model"
+        self.qnn_trainer_sampler.fit(unique_sampler_path, optimiser_settings)
+        NeuralNetworkClassifier.load(unique_sampler_path)
