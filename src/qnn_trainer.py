@@ -17,12 +17,6 @@ class QNNTrainer:
     def __init__(
         self,
         qnn: qiskit.primitives.BaseEstimator | qiskit.primitives.BaseSampler,
-        optimiser: (
-            None
-            | qiskit_algorithms.optimizers.Optimizer
-            | qiskit_algorithms.optimizers.Minimizer
-        ),
-        loss: str | Loss,
         train_data: np.typing.ArrayLike,
         train_labels: np.typing.ArrayLike,
         test_data: np.typing.ArrayLike,
@@ -34,8 +28,6 @@ class QNNTrainer:
         """Iniitalise this class.
 
         :param qiskit.primitives.BaseEstimator | qiskit.primitives.BaseSampler qnn: QNN
-        :param None  |  qiskit_algorithms.optimizers.Optimizer  |  qiskit_algorithms.optimizers.Minimizer optimiser: optimiser
-        :param str | Loss loss: loss
         :param np.typing.ArrayLike train_data: train data
         :param np.typing.ArrayLike train_labels: train label
         :param np.typing.ArrayLike test_data: test data
@@ -45,11 +37,8 @@ class QNNTrainer:
         :param None | int seed: random seed, defaults to 91
         """
         self.qnn = qnn
-        self.optimiser = optimiser
-        self.loss = loss
         self.initial_point = initial_point
         self.callback = callback
-
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data
@@ -57,10 +46,22 @@ class QNNTrainer:
 
         self.seed = seed
 
-    def fit(self, model_path: str, optimiser_settings: None | dict = None):
+    def fit(
+        self,
+        model_path: str,
+        optimiser: (
+            None
+            | qiskit_algorithms.optimizers.Optimizer
+            | qiskit_algorithms.optimizers.Minimizer
+        ),
+        loss: str | Loss,
+        optimiser_settings: None | dict = None,
+    ):
         """Fit the model with the settings.
 
         :param str model_path: path to fitted model to save
+        :param None  |  qiskit_algorithms.optimizers.Optimizer  |  qiskit_algorithms.optimizers.Minimizer optimiser: optimiser
+        :param str | Loss loss: loss
         :param None | dict optimiser_settings: optimiser settings, defaults to None
         """
         # Fix the random seeds according to the setting.
@@ -68,14 +69,14 @@ class QNNTrainer:
             src.utils.fix_seed(self.seed)
 
         # Create an instance of NeuralNetworkClassifier.
-        if self.optimiser is not None:
-            _optimiser = self.optimiser(**optimiser_settings)
+        if optimiser is not None:
+            _optimiser = optimiser(**optimiser_settings)
         else:
             _optimiser = None
         self.classifier = NeuralNetworkClassifier(
             neural_network=self.qnn,
             optimizer=_optimiser,
-            loss=self.loss,
+            loss=loss,
             initial_point=self.initial_point,
             callback=self.callback,
         )
