@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # Get the qiskit example QNN.
     print("Building the model...", end="")
-    example_estimator_qnn = QNNBuilder().get_example_structure_etimator_qnn(
+    example_estimator_qnn = QNNBuilder().get_example_structure_estimator_qnn(
         len(train_images[0])
     )
     print("Done.")
