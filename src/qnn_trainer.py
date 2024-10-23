@@ -5,6 +5,7 @@ import qiskit
 import qiskit_algorithms
 import qiskit_algorithms.optimizers
 from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
+from qiskit_machine_learning.utils.loss_functions.loss_functions import Loss
 
 
 class QNNTrainer:
@@ -18,6 +19,7 @@ class QNNTrainer:
             | qiskit_algorithms.optimizers.Optimizer
             | qiskit_algorithms.optimizers.Minimizer
         ),
+        loss: str | Loss,
         train_data: np.typing.ArrayLike,
         train_labels: np.typing.ArrayLike,
         test_data: np.typing.ArrayLike,
@@ -40,6 +42,7 @@ class QNNTrainer:
         """
         self.qnn = qnn
         self.optimiser = optimiser
+        self.loss = loss
         self.initial_point = initial_point
         self.callback = callback
 

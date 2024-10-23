@@ -15,6 +15,7 @@ class TestQNNTrainer:
         cls.estimator_qnn = EstimatorQNN(circuit=qc)
         cls.sampler_qnn = SamplerQNN(circuit=qc)
         cls.optimiser = None
+        cls.loss = None
         cls.initial_point = None
         cls.callback = None
 
@@ -32,6 +33,7 @@ class TestQNNTrainer:
         cls.qnn_trainer_estimator = QNNTrainer(
             qnn=cls.estimator_qnn,
             optimiser=cls.optimiser,
+            loss=cls.loss,
             train_data=cls.train_data,
             train_labels=cls.train_labels,
             test_data=cls.test_data,
@@ -44,6 +46,7 @@ class TestQNNTrainer:
         cls.qnn_trainer_sampler = QNNTrainer(
             qnn=cls.sampler_qnn,
             optimiser=cls.optimiser,
+            loss=cls.loss,
             train_data=cls.train_data,
             train_labels=cls.train_labels,
             test_data=cls.test_data,
@@ -59,6 +62,7 @@ class TestQNNTrainer:
         """
         assert self.qnn_trainer_estimator.qnn == self.estimator_qnn
         assert self.qnn_trainer_estimator.optimiser == self.optimiser
+        assert self.qnn_trainer_estimator.loss == self.loss
         assert np.allclose(self.qnn_trainer_estimator.train_data, self.train_data)
         assert np.allclose(self.qnn_trainer_estimator.train_labels, self.train_labels)
         assert np.allclose(self.qnn_trainer_estimator.test_data, self.test_data)
@@ -68,6 +72,7 @@ class TestQNNTrainer:
 
         assert self.qnn_trainer_sampler.qnn == self.sampler_qnn
         assert self.qnn_trainer_sampler.optimiser == self.optimiser
+        assert self.qnn_trainer_sampler.loss == self.loss
         assert np.allclose(self.qnn_trainer_sampler.train_data, self.train_data)
         assert np.allclose(self.qnn_trainer_sampler.train_labels, self.train_labels)
         assert np.allclose(self.qnn_trainer_sampler.test_data, self.test_data)
