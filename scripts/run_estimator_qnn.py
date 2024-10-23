@@ -4,10 +4,10 @@ import yaml
 
 import numpy as np
 import qiskit_algorithms
-from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
 from sklearn.model_selection import train_test_split
 
 from src.qnn_builder import QNNBuilder
+from src.qnn_trainer import QNNTrainer
 from src.utils import fix_seed, generate_line_dataset, callback_print
 
 if __name__ == "__main__":
@@ -47,38 +47,25 @@ if __name__ == "__main__":
     print("Done.")
 
     # Create the classifier.
-    classifier = NeuralNetworkClassifier(
-        example_estimator_qnn,
-        optimizer=qiskit_algorithms.optimizers.COBYLA(maxiter=config_train["maxiter"]),
+    qnn_trainer = QNNTrainer(
+        qnn=example_estimator_qnn,
+        train_data=train_images,
+        train_labels=train_labels,
+        test_data=test_images,
+        test_labels=test_labels,
         callback=callback_print,
-    )
-    # Fit the model.
-    print("Fitting the model...", end="")
-    x = np.asarray(train_images)
-    y = np.asarray(train_labels)
-    classifier.fit(x, y)
-    print("Done.")
-    print(
-        f"Accuracy from the train data : {np.round(100 * classifier.score(x, y), 2)}%"
+        seed=None,  # Already fixed.
     )
 
-    # Test the model.
-    x = np.asarray(test_images)
-    y = np.asarray(test_labels)
-    print(f"Accuracy from the test data: {np.round(100 * classifier.score(x, y), 2)}%")
-
+    # Create the directory to save the model.
     model_path = config_train["model_path"]
-    # Create the directory.
     dir_path = os.path.dirname(model_path)
     if os.path.isdir(dir_path):
         os.makedirs(dir_path)
-    # Save the model.
-    classifier.save(model_path)
-
-    # Load the saved model as the test.
-    save_classifier = NeuralNetworkClassifier.load(model_path)
-
-    # Test the saved model as the test.
-    print(
-        f"Accuracy from the test data: {np.round(100 * save_classifier.score(x, y), 2)}%"
+    # Fit the model.
+    qnn_trainer.fit(
+        model_path=model_path,
+        optimiser=qiskit_algorithms.optimizers.COBYLA,
+        loss="squared_error",
+        optimiser_settings={"maxiter": config_train["maxiter"]},
     )
