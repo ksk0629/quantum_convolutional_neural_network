@@ -51,3 +51,36 @@ class TestQNNBuilder:
         """
         config_path = "./configs/_ibm_account.yaml"
         self.qnn_builder.get_example_ibm_runtime_estimator_qnn(config_path=config_path)
+
+    def test_get_example_sampler_qnn(self):
+        """Normal test;
+        Runs get_example_sampler_qnn.
+
+        Check if no error happens.
+        """
+        self.qnn_builder.get_example_sampler_qnn()
+
+    @pytest.mark.parametrize("data_size", [2, 4, 16])
+    def test_get_example_structure_sampler_qnn(self, data_size):
+        """Normal test;
+        Runs get_example_structure_sampler_qnn with valid data_size.
+
+        Check if no error happens.
+        """
+        self.qnn_builder.get_example_structure_sampler_qnn(data_size)
+
+    def test_get_example_exact_aer_sampler_qnn(self):
+        """Normal test;
+        Runs get_example_exact_aer_sampler_qnn.
+
+        Check if no error happens.
+        """
+        self.qnn_builder.get_example_exact_aer_sampler_qnn()
+
+    def test_get_example_noisy_aer_sampler_qnn(self):
+        """Normal test;
+        Runs get_example_noisy_aer_sampler_qnn.
+
+        Check if no error happens.
+        """
+        self.qnn_builder.get_example_noisy_aer_sampler_qnn()
