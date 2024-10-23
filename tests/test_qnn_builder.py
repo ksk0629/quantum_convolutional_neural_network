@@ -68,3 +68,11 @@ class TestQNNBuilder:
         Check if no error happens.
         """
         self.qnn_builder.get_example_structure_sampler_qnn(data_size)
+
+    def test_get_example_exact_aer_sampler_qnn(self):
+        """Normal test;
+        Runs get_example_exact_aer_sampler_qnn.
+
+        Check if no error happens.
+        """
+        self.qnn_builder.get_example_exact_aer_sampler_qnn()
