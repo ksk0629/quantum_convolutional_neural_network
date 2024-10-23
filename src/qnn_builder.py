@@ -4,7 +4,7 @@ import qiskit
 import qiskit_aer
 import qiskit_aer.primitives
 import qiskit_ibm_runtime
-from qiskit_machine_learning.neural_networks import EstimatorQNN
+from qiskit_machine_learning.neural_networks import EstimatorQNN, SamplerQNN
 
 from src.quant_conv_layer import QuantConvLayer
 from src.quant_pool_layer import QuantPoolLayer
@@ -106,6 +106,45 @@ class QNNBuilder:
             observables=observable,
             input_params=feature_map.parameters,
             weight_params=ansatz.parameters,
+        )
+
+    def get_example_sampler_qnn(self) -> SamplerQNN:
+        """Get the SamplerQNN introduced in the qiskit example.
+
+        :return SamplerQNN: EstimatorQNN introduced in qiskit example
+        """
+        return self.get_example_structure_sampler_qnn(8)
+
+    def get_example_structure_sampler_qnn(
+        self, data_size: int, sampler: None | qiskit.primitives.BaseSampler = None
+    ) -> SamplerQNN:
+        """Get the QCNN having the structure as follows.
+        First, there is the ZFeatureMap,
+        and then there are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
+        until the number of active qubits is one.
+
+        :param int data_size: data size
+        :param None | BaseSampler sampler: sampler primitive, defaults to None
+        :return SamplerQNN: SamplerQNN having structure introduced in qiskit example
+        """
+        feature_map = self.__get_z_feature_map(data_size=data_size)
+        ansatz = self.__get_ansatz(data_size=data_size)
+
+        # Combine the feature map and ansatz.
+        circuit = qiskit.QuantumCircuit(data_size)
+        circuit.compose(feature_map, range(data_size), inplace=True)
+        circuit.compose(ansatz, range(data_size), inplace=True)
+
+        parity = lambda x: "{:b}".format(x).count("1") % 2
+        output_shape = 2  # parity = 0, 1
+
+        return SamplerQNN(
+            sampler=sampler,
+            circuit=circuit.decompose(),
+            input_params=feature_map.parameters,
+            weight_params=ansatz.parameters,
+            interpret=parity,
+            output_shape=output_shape,
         )
 
     def __get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
