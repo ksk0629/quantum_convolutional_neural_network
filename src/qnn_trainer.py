@@ -35,6 +35,7 @@ class QNNTrainer:
 
         :param qiskit.primitives.BaseEstimator | qiskit.primitives.BaseSampler qnn: QNN
         :param None  |  qiskit_algorithms.optimizers.Optimizer  |  qiskit_algorithms.optimizers.Minimizer optimiser: optimiser
+        :param str | Loss loss: loss
         :param np.typing.ArrayLike train_data: train data
         :param np.typing.ArrayLike train_labels: train label
         :param np.typing.ArrayLike test_data: test data
@@ -57,6 +58,11 @@ class QNNTrainer:
         self.seed = seed
 
     def fit(self, model_path: str, optimiser_settings: None | dict = None):
+        """Fit the model with the settings.
+
+        :param str model_path: path to fitted model to save
+        :param None | dict optimiser_settings: optimiser settings, defaults to None
+        """
         # Fix the random seeds according to the setting.
         if self.seed is not None:
             src.utils.fix_seed(self.seed)

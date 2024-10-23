@@ -85,6 +85,11 @@ class TestQNNTrainer:
         assert self.qnn_trainer_sampler.seed == self.seed
 
     def test_fit(self, tmp_path):
+        """Normal test;
+        Run fit function of trainers created in the setup_class.
+
+        Check if no error happens.
+        """
         optimiser_settings = {"maxiter": 1}
 
         unique_estimator_path = f"{tmp_path}/estimator.model"
