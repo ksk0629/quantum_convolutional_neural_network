@@ -147,6 +147,17 @@ class QNNBuilder:
             output_shape=output_shape,
         )
 
+    def get_example_exact_aer_sampler_qnn(self, seed: None | int = 91) -> SamplerQNN:
+        """Get the SamplerQNN introduced in the qiskit example with the exact sampler from qiskit_aer.
+
+        :param None | int seed: random seed
+        :return SamplerQNN: SamplerQNN introduced in qiskit example with the exact sampler from qiskit_aer
+        """
+        return self.get_example_structure_sampler_qnn(
+            8,
+            qiskit_aer.primitives.Sampler(backend_options=dict(seed_simulator=seed)),
+        )
+
     def __get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
         """Get the quantum circuit representing ZFeatureMap.
 
