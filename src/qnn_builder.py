@@ -26,7 +26,7 @@ class QNNBuilder:
     def get_example_exact_aer_estimator_qnn(
         self, seed: None | int = 91
     ) -> EstimatorQNN:
-        """Get the EstimatorWNN introduced in the qiskit example with the exact estimator from qiskit_aer.
+        """Get the EstimatorQNN introduced in the qiskit example with the exact estimator from qiskit_aer.
 
         :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with the exact estimator from qiskit_aer
@@ -39,7 +39,7 @@ class QNNBuilder:
     def get_example_noisy_aer_estimator_qnn(
         self, seed: None | int = 91
     ) -> EstimatorQNN:
-        """Get the EstimatorWNN introduced in the qiskit example with a noisy estimator from qiskit_aer.
+        """Get the EstimatorQNN introduced in the qiskit example with a noisy estimator from qiskit_aer.
 
         :param None | int seed: random seed
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with a noisy estimator from qiskit_aer
@@ -57,7 +57,7 @@ class QNNBuilder:
         return self.get_example_structure_estimator_qnn(8, noisy_estimator)
 
     def get_example_ibm_runtime_estimator_qnn(self, config_path: str) -> EstimatorQNN:
-        """Get the EstimatorWNN introduced in the qiskit example with a real ibm quantum hardware.
+        """Get the EstimatorQNN introduced in the qiskit example with a real ibm quantum hardware.
 
         :param str config_path: path to config file including my ibm quantum token
         :return EstimatorQNN: EstimatorQNN introduced in qiskit example with real ibm quantum hardware
