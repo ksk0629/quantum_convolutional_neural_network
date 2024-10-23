@@ -20,11 +20,13 @@ if __name__ == "__main__":
     # Read the given config file.
     with open(args.config_yaml_path, "r") as config_yaml:
         config = yaml.safe_load(config_yaml)
+    config_train = config["train"]
+    config_dataset = config["dataset"]
 
     # Fix the random seed.
     fix_seed(config["train"]["random_seed"])
 
-    # >>> Dataset >>>
+    # Create the dataset.
     print("Generating the dataset...", end="")
     images, labels = generate_line_dataset(**config["dataset"])
     print("Done.")
@@ -33,8 +35,8 @@ if __name__ == "__main__":
     train_images, test_images, train_labels, test_labels = train_test_split(
         images,
         labels,
-        test_size=config["train"]["test_size"],
-        random_state=config["train"]["random_seed"],
+        test_size=config_train["test_size"],
+        random_state=config_train["random_seed"],
     )
 
     # Get the qiskit example QNN.
@@ -47,9 +49,7 @@ if __name__ == "__main__":
     # Create the classifier.
     classifier = NeuralNetworkClassifier(
         example_estimator_qnn,
-        optimizer=qiskit_algorithms.optimizers.COBYLA(
-            maxiter=config["train"]["maxiter"]
-        ),
+        optimizer=qiskit_algorithms.optimizers.COBYLA(maxiter=config_train["maxiter"]),
         callback=callback_print,
     )
     # Fit the model.
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     y = np.asarray(test_labels)
     print(f"Accuracy from the test data: {np.round(100 * classifier.score(x, y), 2)}%")
 
-    model_path = config["train"]["model_path"]
+    model_path = config_train["model_path"]
     # Create the directory.
     dir_path = os.path.dirname(model_path)
     if os.path.isdir(dir_path):
