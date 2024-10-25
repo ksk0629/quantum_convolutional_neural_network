@@ -3,8 +3,8 @@ import numpy as np
 import qiskit_algorithms
 
 
-class LineDataset:
-    """Line dataset class.
+class LineDatasetGenerator:
+    """Line dataset generator class.
     This class is generalisation of the dataset introduced in the qiskit tutorial.
     See https://qiskit-community.github.io/qiskit-machine-learning/tutorials/11_quantum_convolutional_neural_networks.html.
     """

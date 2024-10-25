@@ -3,7 +3,7 @@ import yaml
 
 from sklearn.model_selection import train_test_split
 
-from src.line_dataset import LineDataset
+from src.line_dataset_generator import LineDatasetGenerator
 from src.training import train
 from src.utils import fix_seed
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # Create the dataset.
     num_images = config_dataset["generating"]["num_images"]
     del config_dataset["generating"]["num_images"]
-    line_dataset = LineDataset(**config_dataset["generating"])
+    line_dataset = LineDatasetGenerator(**config_dataset["generating"])
     images, labels = line_dataset.generate(num_images=num_images)
     print("Generated the dataset.")
 

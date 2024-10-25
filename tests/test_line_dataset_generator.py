@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 
-from src.line_dataset import LineDataset
+from src.line_dataset_generator import LineDatasetGenerator
 
 
-class TestLineDataset:
+class TestLineDatasetGenerator:
 
     @classmethod
     def setup_class(cls):
@@ -14,7 +14,7 @@ class TestLineDataset:
         cls.min_noise_value = 0
         cls.max_noise_value = np.pi / 4
 
-        cls.line_dataset = LineDataset(
+        cls.line_dataset = LineDatasetGenerator(
             image_shape=cls.image_shape,
             line_length=cls.line_length,
             line_pixel_value=cls.line_pixel_value,
@@ -90,7 +90,7 @@ class TestLineDataset:
         """
         (image_shape, line_length) = image_shape_and_line_length
         with pytest.raises(ValueError):
-            LineDataset(
+            LineDatasetGenerator(
                 image_shape=image_shape,
                 line_length=line_length,
                 line_pixel_value=self.line_pixel_value,
