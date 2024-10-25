@@ -3,8 +3,9 @@ import yaml
 
 from sklearn.model_selection import train_test_split
 
+from src.line_dataset import LineDataset
 from src.training import train
-from src.utils import fix_seed, generate_line_dataset
+from src.utils import fix_seed
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -25,7 +26,10 @@ if __name__ == "__main__":
     fix_seed(config_general["random_seed"])
 
     # Create the dataset.
-    images, labels = generate_line_dataset(**config_dataset["generating"])
+    num_images = config_dataset["generating"]["num_images"]
+    del config_dataset["generating"]["num_images"]
+    line_dataset = LineDataset(**config_dataset["generating"])
+    images, labels = line_dataset.generate(num_images=num_images)
     print("Generated the dataset.")
 
     # Get the training and testing datasets.
