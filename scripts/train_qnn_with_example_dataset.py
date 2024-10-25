@@ -21,6 +21,7 @@ if __name__ == "__main__":
     config_dataset = config["dataset"]
     config_model = config["model"]
     config_train = config["train"]
+    config_mlflow = config["mlflow"]
 
     # Fix the random seed.
     fix_seed(config_general["random_seed"])
@@ -41,6 +42,8 @@ if __name__ == "__main__":
     )
 
     train(
+        experiment_name=config_mlflow["experiment_name"],
+        run_name=config_mlflow["run_name"],
         train_data=train_images,
         train_labels=train_labels,
         test_data=test_images,

@@ -1,5 +1,6 @@
 import random
 
+import mlflow
 import numpy as np
 import qiskit_algorithms
 import torch
@@ -29,3 +30,12 @@ def callback_print(weights: np.ndarray, obj_func_eval: float):
     :param float obj_func_eval: objective function value
     """
     print(f"current_value: {obj_func_eval}")
+
+
+def callback_mlflow(weights: np.ndarray, obj_func_eval: float):
+    """Save the objective function value as train_loss to mlflow.
+
+    :param np.ndarray weights: current weights
+    :param float obj_func_eval: objective function value
+    """
+    mlflow.log_metric(f"train_loss", obj_func_eval)

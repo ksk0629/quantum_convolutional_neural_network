@@ -1,6 +1,7 @@
 from collections.abc import Callable
 import os
 
+import mlflow
 import numpy as np
 import qiskit
 import qiskit_algorithms
@@ -88,15 +89,18 @@ class QNNTrainer:
 
         # Get accuracy for the traininig data.
         train_accuracy = 100 * self.classifier.score(train_x, train_y)
+        mlflow.log_metric(f"train_accuracy", train_accuracy)
         print(f"Accuracy for the training data: {train_accuracy}")
 
         # Get accuracy for the test data.
         test_x = np.asarray(self.test_data)
         test_y = np.asarray(self.test_labels)
         test_accuracy = 100 * self.classifier.score(test_x, test_y)
+        mlflow.log_metric(f"test_accuracy", test_accuracy)
         print(f"Accuracy for the test data: {test_accuracy}")
 
         # Save the fitted model.
         dir_path = os.path.dirname(os.path.abspath(model_path))
         os.makedirs(dir_path, exist_ok=True)
         self.classifier.save(model_path)
+        mlflow.log_artifact(model_path)
