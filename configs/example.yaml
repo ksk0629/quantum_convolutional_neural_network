@@ -13,9 +13,12 @@ dataset:
 model:
   mode: "example_estimator"
 train:
-  callback: "callback_print"
+  callback: "callback_mlflow"
   loss: "squared_error"
   optimiser: "cobyla"
   optimiser_settings:
-    maxiter: 1
+    maxiter: 3
   model_path: "./models/examples/example.model"
+mlflow:
+  experiment_name: "example"
+  run_name: "example"

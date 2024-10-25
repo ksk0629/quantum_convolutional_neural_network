@@ -1,6 +1,7 @@
 from collections.abc import Callable
 import os
 
+import mlflow
 import numpy as np
 import qiskit_algorithms
 from qiskit_machine_learning.neural_networks import EstimatorQNN, SamplerQNN
@@ -8,7 +9,7 @@ from qiskit_machine_learning.utils.loss_functions.loss_functions import Loss
 
 from src.qnn_builder import QNNBuilder
 from src.qnn_trainer import QNNTrainer
-from src.utils import callback_print
+from src.utils import callback_print, callback_mlflow
 
 
 def select_qnn(mode: str, data_size: int) -> EstimatorQNN | SamplerQNN:
@@ -118,13 +119,22 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
 def select_callback(
     callback_str: str,
 ) -> None | Callable[[np.ndarray, float], None] | None:
+    """Select the callback function accodring to the given string.
+
+    :param str callback_str: callback string
+    :return None | Callable[[np.ndarray, float], None] | None: callback function
+    """
     match callback_str:
         case "callback_print":
             callback = callback_print
+        case "callback_mlflow":
+            callback = callback_mlflow
     return callback
 
 
 def train(
+    experiment_name: str,
+    run_name: str,
     train_data: np.typing.ArrayLike,
     train_labels: np.typing.ArrayLike,
     test_data: np.typing.ArrayLike,
@@ -138,6 +148,23 @@ def train(
     optimiser_settings: None | dict = None,
     seed: None | int = 91,
 ):
+    """Train the QNN and save the training process.
+
+    :param str experiment_name: experiment name for mlflow
+    :param str run_name: run name for mlflow
+    :param np.typing.ArrayLike train_data: training data
+    :param np.typing.ArrayLike train_labels: training labels
+    :param np.typing.ArrayLike test_data: test data
+    :param np.typing.ArrayLike test_labels: test labels
+    :param str mode: QNN mode
+    :param str model_path: path to model to save
+    :param str optimiser_str: optimiser string
+    :param str | Loss loss: loss
+    :param None | np.ndarray initial_point: initial point, defaults to None
+    :param None | str callback_str: callback string, defaults to None
+    :param None | dict optimiser_settings: optimiser settings, defaults to None
+    :param None | int seed: random seed, defaults to 91
+    """
     # Get the QNN.
     qnn = select_qnn(mode=mode, data_size=len(train_data[0]))
     print(f"Built the QNN, given mode: {mode}.")
@@ -168,9 +195,35 @@ def train(
         f"Get optimiser, given optimiser: {optimiser_str}, the instance: {optimiser}."
     )
 
-    qnn_trainer.fit(
-        model_path=model_path,
-        optimiser=optimiser,
-        loss=loss,
-        optimiser_settings=optimiser_settings,
-    )
+    # Start mlflow.
+    mlflow.set_experiment(experiment_name)
+    with mlflow.start_run(run_name=run_name):
+        # Create datasets and save them into mlflow.
+        train_dataset = mlflow.data.from_numpy(
+            np.asarray(train_data), targets=np.asarray(train_labels)
+        )
+        mlflow.log_input(train_dataset, context="training")
+        test_dataset = mlflow.data.from_numpy(
+            np.asarray(test_data), targets=np.asarray(test_labels)
+        )
+        mlflow.log_input(test_dataset, context="test")
+        # Save conifigs into mlflow.
+        model_config = {
+            "model_mode": mode,
+        }
+        mlflow.log_params(model_config)
+        train_config = {
+            "optimiser_str": optimiser_str,
+            "loss": loss,
+            "initial_point": initial_point,
+            "optimiser_settings": optimiser_settings,
+            "seed": seed,
+        }
+        mlflow.log_params(train_config)
+
+        qnn_trainer.fit(
+            model_path=model_path,
+            optimiser=optimiser,
+            loss=loss,
+            optimiser_settings=optimiser_settings,
+        )
