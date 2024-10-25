@@ -178,14 +178,19 @@ def train(
         f"Get optimiser, given optimiser: {optimiser_str}, the instance: {optimiser}."
     )
 
+    # Start mlflow.
     mlflow.set_experiment(experiment_name)
     with mlflow.start_run(run_name=run_name):
-        qnn_trainer.fit(
-            model_path=model_path,
-            optimiser=optimiser,
-            loss=loss,
-            optimiser_settings=optimiser_settings,
+        # Create datasets and save them into mlflow.
+        train_dataset = mlflow.data.from_numpy(
+            np.asarray(train_data), targets=np.asarray(train_labels)
         )
+        mlflow.log_input(train_dataset, context="training")
+        test_dataset = mlflow.data.from_numpy(
+            np.asarray(test_data), targets=np.asarray(test_labels)
+        )
+        mlflow.log_input(test_dataset, context="test")
+        # Save conifigs into mlflow.
         model_config = {
             "model_mode": mode,
         }
@@ -198,3 +203,10 @@ def train(
             "seed": seed,
         }
         mlflow.log_params(train_config)
+
+        qnn_trainer.fit(
+            model_path=model_path,
+            optimiser=optimiser,
+            loss=loss,
+            optimiser_settings=optimiser_settings,
+        )
