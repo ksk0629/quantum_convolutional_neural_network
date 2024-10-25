@@ -1,11 +1,10 @@
 import argparse
-import os
 import yaml
 
 from sklearn.model_selection import train_test_split
 
 from src.training import train
-from src.utils import fix_seed, generate_line_dataset, callback_print
+from src.utils import fix_seed, generate_line_dataset
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -47,7 +46,7 @@ if __name__ == "__main__":
         optimiser_str=config_train["optimiser"],
         loss=config_train["loss"],
         initial_point=None,
-        callback=callback_print,
+        callback_str=config_train["callback"],
         optimiser_settings=config_train["optimiser_settings"],
         seed=None,  # Already fixed
     )

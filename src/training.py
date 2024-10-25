@@ -8,6 +8,7 @@ from qiskit_machine_learning.utils.loss_functions.loss_functions import Loss
 
 from src.qnn_builder import QNNBuilder
 from src.qnn_trainer import QNNTrainer
+from src.utils import callback_print
 
 
 def select_qnn(mode: str, data_size: int) -> EstimatorQNN | SamplerQNN:
@@ -114,6 +115,15 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
     return optimiser
 
 
+def select_callback(
+    callback_str: str,
+) -> None | Callable[[np.ndarray, float], None] | None:
+    match callback_str:
+        case "callback_print":
+            callback = callback_print
+    return callback
+
+
 def train(
     train_data: np.typing.ArrayLike,
     train_labels: np.typing.ArrayLike,
@@ -124,13 +134,16 @@ def train(
     optimiser_str: str,
     loss: str | Loss,
     initial_point: None | np.ndarray = None,
-    callback: None | Callable[[np.ndarray, float], None] | None = None,
+    callback_str: None | str = None,
     optimiser_settings: None | dict = None,
     seed: None | int = 91,
 ):
     # Get the QNN.
     qnn = select_qnn(mode=mode, data_size=len(train_data[0]))
     print(f"Built the QNN, given mode: {mode}.")
+
+    # Get the callback.
+    callback = select_callback(callback_str=callback_str)
 
     # Create the classifier.
     qnn_trainer = QNNTrainer(

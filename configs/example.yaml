@@ -13,6 +13,7 @@ dataset:
 model:
   mode: "example_estimator"
 train:
+  callback: "callback_print"
   loss: "squared_error"
   optimiser: "cobyla"
   optimiser_settings:
