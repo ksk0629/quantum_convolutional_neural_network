@@ -119,6 +119,11 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
 def select_callback(
     callback_str: str,
 ) -> None | Callable[[np.ndarray, float], None] | None:
+    """Select the callback function accodring to the given string.
+
+    :param str callback_str: callback string
+    :return None | Callable[[np.ndarray, float], None] | None: callback function
+    """
     match callback_str:
         case "callback_print":
             callback = callback_print
