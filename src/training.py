@@ -148,6 +148,23 @@ def train(
     optimiser_settings: None | dict = None,
     seed: None | int = 91,
 ):
+    """Train the QNN and save the training process.
+
+    :param str experiment_name: experiment name for mlflow
+    :param str run_name: run name for mlflow
+    :param np.typing.ArrayLike train_data: training data
+    :param np.typing.ArrayLike train_labels: training labels
+    :param np.typing.ArrayLike test_data: test data
+    :param np.typing.ArrayLike test_labels: test labels
+    :param str mode: QNN mode
+    :param str model_path: path to model to save
+    :param str optimiser_str: optimiser string
+    :param str | Loss loss: loss
+    :param None | np.ndarray initial_point: initial point, defaults to None
+    :param None | str callback_str: callback string, defaults to None
+    :param None | dict optimiser_settings: optimiser settings, defaults to None
+    :param None | int seed: random seed, defaults to 91
+    """
     # Get the QNN.
     qnn = select_qnn(mode=mode, data_size=len(train_data[0]))
     print(f"Built the QNN, given mode: {mode}.")
