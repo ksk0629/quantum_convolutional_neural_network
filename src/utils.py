@@ -5,6 +5,9 @@ import numpy as np
 import qiskit_algorithms
 import torch
 
+# For callback functions.
+global_current_step = 0
+
 
 def fix_seed(seed: int):
     """Fix the random seeds to have reproducibility.
@@ -29,7 +32,9 @@ def callback_print(weights: np.ndarray, obj_func_eval: float):
     :param np.ndarray weights: current weights
     :param float obj_func_eval: objective function value
     """
-    print(f"current_value: {obj_func_eval}")
+    global global_current_step
+    global_current_step += 1
+    print(f"Iter {global_current_step}, current_value: {obj_func_eval}")
 
 
 def callback_mlflow(weights: np.ndarray, obj_func_eval: float):
@@ -38,4 +43,6 @@ def callback_mlflow(weights: np.ndarray, obj_func_eval: float):
     :param np.ndarray weights: current weights
     :param float obj_func_eval: objective function value
     """
-    mlflow.log_metric(f"train_loss", obj_func_eval)
+    global global_current_step
+    global_current_step += 1
+    mlflow.log_metric(f"train_loss", obj_func_eval, step=global_current_step)
