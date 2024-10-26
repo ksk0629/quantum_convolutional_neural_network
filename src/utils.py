@@ -1,5 +1,6 @@
 import random
 
+import matplotlib.pyplot as plt
 import mlflow
 import numpy as np
 import qiskit_algorithms
@@ -7,6 +8,8 @@ import torch
 
 # For callback functions.
 global_current_step = 0
+global_objective_func_vals = []
+GLOBAL_GRAPH_PATH = "./objective_values.png"
 
 
 def fix_seed(seed: int):
@@ -46,3 +49,20 @@ def callback_mlflow(weights: np.ndarray, obj_func_eval: float):
     global global_current_step
     global_current_step += 1
     mlflow.log_metric(f"train_loss", obj_func_eval, step=global_current_step)
+
+
+def callback_graph(weights: np.ndarray, obj_func_eval: float):
+    """Save the objective function value as train_loss to mlflow.
+
+    :param np.ndarray weights: current weights
+    :param float obj_func_eval: objective function value
+    """
+    global global_objective_func_vals
+    global_objective_func_vals.append(obj_func_eval)
+    plt.title("Objective function value against iteration")
+    plt.xlabel("Iteration")
+    plt.ylabel("Objective function value")
+    plt.plot(range(len(global_objective_func_vals)), global_objective_func_vals)
+
+    global GLOBAL_GRAPH_PATH
+    plt.savefig(GLOBAL_GRAPH_PATH)

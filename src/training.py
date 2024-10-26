@@ -9,7 +9,7 @@ from qiskit_machine_learning.utils.loss_functions.loss_functions import Loss
 
 from src.qnn_builder import QNNBuilder
 from src.qnn_trainer import QNNTrainer
-from src.utils import callback_print, callback_mlflow
+import src.utils
 
 
 def select_qnn(mode: str, data_size: int) -> EstimatorQNN | SamplerQNN:
@@ -126,9 +126,12 @@ def select_callback(
     """
     match callback_str:
         case "callback_print":
-            callback = callback_print
+            callback = src.utils.callback_print
         case "callback_mlflow":
-            callback = callback_mlflow
+            callback = src.utils.callback_mlflow
+        case "callback_graph":
+            callback = src.utils.callback_graph
+
     return callback
 
 
