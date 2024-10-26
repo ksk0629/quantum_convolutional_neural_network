@@ -131,6 +131,8 @@ def select_callback(
             callback = src.utils.callback_mlflow
         case "callback_graph":
             callback = src.utils.callback_graph
+        case "callback_all":
+            callback = src.utils.callback_all
 
     return callback
 

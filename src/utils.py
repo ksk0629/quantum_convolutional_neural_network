@@ -66,3 +66,28 @@ def callback_graph(weights: np.ndarray, obj_func_eval: float):
 
     global GLOBAL_GRAPH_PATH
     plt.savefig(GLOBAL_GRAPH_PATH)
+
+
+def callback_all(weights: np.ndarray, obj_func_eval: float):
+    """Print and save the objective function value to mlflow, and save the fig.
+
+    :param np.ndarray weights: current weights
+    :param float obj_func_eval: objective function value
+    """
+    # Print to the terminal.
+    global global_current_step
+    global_current_step += 1
+    print(f"Iter {global_current_step}, current_value: {obj_func_eval}")
+
+    # Save the metric.
+    mlflow.log_metric(f"train_loss", obj_func_eval, step=global_current_step)
+
+    # Save the fig.
+    global global_objective_func_vals
+    global_objective_func_vals.append(obj_func_eval)
+    plt.title("Objective function value against iteration")
+    plt.xlabel("Iteration")
+    plt.ylabel("Objective function value")
+    plt.plot(range(len(global_objective_func_vals)), global_objective_func_vals)
+    global GLOBAL_GRAPH_PATH
+    plt.savefig(GLOBAL_GRAPH_PATH)
