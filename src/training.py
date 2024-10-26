@@ -61,7 +61,7 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
         case "adam":
             optimiser = qiskit_algorithms.optimizers.ADAM
         case "adgd":
-            optimiser = qiskit_algorithms.optimizers.ADGS
+            optimiser = qiskit_algorithms.optimizers.AQGD
         case "cg":
             optimiser = qiskit_algorithms.optimizers.CG
         case "cobyla":
@@ -72,8 +72,6 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
             optimiser = qiskit_algorithms.optimizers.GSLS
         case "gradient_descent":
             optimiser = qiskit_algorithms.optimizers.GradientDescent
-        case "gradient_descent_state":
-            optimiser = qiskit_algorithms.optimizers.GradientDescentState
         case "nelder_mead":
             optimiser = qiskit_algorithms.optimizers.NELDER_MEAD
         case "nft":
@@ -83,18 +81,16 @@ def select_optimiser(optimiser_str: str) -> qiskit_algorithms.optimizers.Optimiz
         case "powell":
             optimiser = qiskit_algorithms.optimizers.POWELL
         case "slsqp":
-            optimiser = qiskit_algorithms.optimizers.COBYLA
+            optimiser = qiskit_algorithms.optimizers.SLSQP
         case "spsa":
             optimiser = qiskit_algorithms.optimizers.SPSA
         case "qnspsa":
             optimiser = qiskit_algorithms.optimizers.QNSPSA
         case "tnc":
             optimiser = qiskit_algorithms.optimizers.TNC
-        case "scipy_optimiser":
-            optimiser = qiskit_algorithms.optimizers.SciPyOptimiser
         case "umda":
             optimiser = qiskit_algorithms.optimizers.UMDA
-        case "bobyqa":
+        case "bobyqn":
             optimiser = qiskit_algorithms.optimizers.BOBYQN
         case "imfil":
             optimiser = qiskit_algorithms.optimizers.IMFIL
