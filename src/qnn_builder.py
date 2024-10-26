@@ -90,8 +90,8 @@ class QNNBuilder:
         :param None | BaseEstimator estimator: estimator primitive, defaults to None
         :return EstimatorQNN: EstimatorQNN having structure introduced in qiskit example
         """
-        feature_map = self.__get_z_feature_map(data_size=data_size)
-        ansatz = self.__get_ansatz(data_size=data_size)
+        feature_map = self._get_z_feature_map(data_size=data_size)
+        ansatz = self._get_ansatz(data_size=data_size)
 
         # Combine the feature map and ansatz.
         circuit = qiskit.QuantumCircuit(data_size)
@@ -129,8 +129,8 @@ class QNNBuilder:
         :param None | BaseSampler sampler: sampler primitive, defaults to None
         :return SamplerQNN: SamplerQNN having structure introduced in qiskit example
         """
-        feature_map = self.__get_z_feature_map(data_size=data_size)
-        ansatz = self.__get_ansatz(data_size=data_size)
+        feature_map = self._get_z_feature_map(data_size=data_size)
+        ansatz = self._get_ansatz(data_size=data_size)
 
         # Combine the feature map and ansatz.
         circuit = qiskit.QuantumCircuit(data_size)
@@ -184,7 +184,7 @@ class QNNBuilder:
 
         return self.get_example_structure_sampler_qnn(data_size, noisy_sampler)
 
-    def __get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
+    def _get_z_feature_map(self, data_size: int) -> qiskit.QuantumCircuit:
         """Get the quantum circuit representing ZFeatureMap.
 
         :param int data_size: data size
@@ -196,7 +196,7 @@ class QNNBuilder:
 
         return feature_map
 
-    def __get_ansatz(self, data_size: int) -> qiskit.QuantumCircuit:
+    def _get_ansatz(self, data_size: int) -> qiskit.QuantumCircuit:
         """Get the quantum circuit having the following structure;
         There are series of the ordered sets of the QuantConvLayer and QuantPoolLayer
         until the number of active qubits is one.
