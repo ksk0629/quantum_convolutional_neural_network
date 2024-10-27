@@ -77,7 +77,7 @@ if __name__ == "__main__":
         for optimiser in optimisers:
             try:
                 run_name = f"{optimiser}_default"
-                config_train["model_path"] = f"./models/{EXPERIMENT_NAME}/run_name"
+                config_train["model_path"] = f"./models/{EXPERIMENT_NAME}/{run_name}"
                 config_train["optimiser"] = optimiser
                 train(
                     experiment_name=EXPERIMENT_NAME,
